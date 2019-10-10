@@ -26,7 +26,8 @@ SELECT ENAME, SAL, DEPTNO
 FROM SCOTT.EMP
 WHERE SAL IN (SELECT SAL
               FROM SCOTT.EMP
-              WHERE DEPTNO = 20);
+              WHERE DEPTNO = 20)
+AND DEPTNO != 20;
 
 5. 이름에  T  를 포함하고 있는 사원들과  동일한 부서에서 근무하고 있는 사원의 사원 번호와 이름을  출력하라
 
