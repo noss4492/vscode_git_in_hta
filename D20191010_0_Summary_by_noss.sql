@@ -399,8 +399,213 @@ DDL, DCL 사용시 오토 COMMIT된다는 점을 기억하자.
 
 CREATE USER USER2
 IDENTIFIED BY TIGER
-PASSWORD EXPIRE
+PASSWORD EXPIRE	-- 패스워드 만료됨을 기본 설정으로
 ACCOUNT UNLOCK;
+
+GRANT CONNECT, RESOURCE TO USER2;
+
+ALTER USER USER2
+IDENTIFIED BY TIGER;
+
+자기자신의 비밀번호 바꾸는건
+password라는 키워드로 간단하게 가능함
+
+-----------------밥먹--------------------------
+
+USER2>>
+
+CREATE TABLE EMP
+(EMPNO NUMBER(4));
+
+
+INSERT INTO EMP VALUES(1111);
+
+DROP USER USER2 CASCADE; (오브젝트까지 싹다)
+
+-- 계정 잠그기 기능
+ALTER USER SCOTT
+ACCOUNT LOCK;   
+
+관리자가 잠긴 계정의 테이블도 볼 수 있음
+SYSTEM>SELECT * FROM SCOTT.DEPT;
+
+그래도 로그인은 불가능함
+
+-- 계정 풀기
+ALTER USER SCOTT
+ACCOUNT UNLOCK;   
+
+
+------------------------------------------------
+SQL
+QUERY SELECT
+DML INSERT UPDATE DELETE
+TCL COMIT ROLLBACK
+DDL CREATE ALTER DROP RENAME TRUNCATE COMMENT
+DCL GRANT REVOKE
+
+PL/SQL : 오라클 DB에 적용하는 프로그래밍언어
+(오라클 DB에서만 쓰임. 지엽적이네)
+
+
+-- 시험 본다고 말씀하싐 --
+sql*plus
+
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+
+C:\app\ln4so\product\11.2.0\dbhome_1\NETWORK\ADMIN\listener.ora
+
+밑에 추가(클라이언트 아이피)
+(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-USNLQGV)(PORT = 1521))
+(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.49)(PORT = 1521))
+
+C:\app\ln4so\product\11.2.0\dbhome_1\NETWORK\ADMIN\tnsnames.ora
+맨밑에 
+db1 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.35)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orcl)
+    )
+  )
+추가하고
+serverip를 써준것
+
+tnsping db1 3
+
+
+
+db에서 원격지로 접속하기
+client: tnsnames.ora 수정
+server:listener.ora 수정
+방화벽에서 막힘
+방화벽에서 오라클의 접속만 허용
+
+
+방화벽 인바운드 규칙에서
+새규칙
+
+C:\app\ln4so\product\11.2.0\dbhome_1\BIN\
+oracle
+lsnr
+
+포트번호(1521)
+
+이렇게 3개 추가하고
+
+
+오라클 1521
+mysql 3306
+
+tnsping db1 3
+
+
+
+sqlplus scott/ORACLE@db1
+
+@는 원격접속표시자
+
+
+
+윈10은 
+C:\app\ln4so\product\11.2.0\dbhome_1\NETWORK\ADMIN\sqlnet.ora 파일에서
+주석처리 해야됨  # SQLNET.AUTHENTICATION_SERVICES= (NTS)
+
+
+SQL> select * from attendance;
+
+NAME                 TIME         EMAIL
+-------------------- ------------ --------------------
+전누리               10-OCT-19    zopasw@hanmail.net
+김진우               10-OCT-19    znzlsit@naver.com
+이영재               10-OCT-19    xspead@naver.com
+
+SQL> insert into attendance
+  2  values('노사성', sysdate, 'ln4so@naver.com');
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+
+SQL> update attendance
+  2  set EMAIL = 'ln4so@naver.com'
+  3  where NAME = '노사성';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+
+select name, count(*)
+from attendance
+group by name
+having count(*) >1;
+
+
+@ 뒤에가 원격지 주소네
+아이디/비번@db1(이게 원격지 주소네)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -411,7 +616,6 @@ ACCOUNT UNLOCK;
 
 
 ## 19-10-08 그래서 정리함
-
 
 
 

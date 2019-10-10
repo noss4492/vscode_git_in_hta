@@ -1,0 +1,232 @@
+SQL> SPOOL
+currently spooling to D20191010_SPOOL_3(PRIVILEGE).TXT
+SQL> CONNECT USER1/TIGER
+ERROR:
+ORA-01045: user USER1 lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> SHOW USER
+USER is ""
+SQL> CONNECT SYSTEM/ORACLE
+Connected.
+SQL> GRANT CONNECT, RESOURCE TO USER1;
+
+Grant succeeded.
+
+SQL> CONN USER1/TIGER
+Connected.
+SQL> SELECT * FROM EMP;
+SELECT * FROM EMP
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SET SQLPROMPT "_USER>"
+USER1>SELECT * FROM SCOTT.EMP;
+SELECT * FROM SCOTT.EMP
+                    *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+USER1>SHOW USER
+USER is "USER1"
+USER1>CONN SCOTT/TIGER
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+>CONN SCOTT/ORACLE
+Connected.
+SCOTT>GRANT SELECT ON EMP TO USER1;
+
+Grant succeeded.
+
+SCOTT>CONN USER1/TIGER
+Connected.
+USER1>SELECT ENAME, EMPNO, SAL FROM EMP;
+SELECT ENAME, EMPNO, SAL FROM EMP
+                              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+USER1>SELECT * FROM SCOTT.EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+USER1>SHOW SER
+SP2-0158: unknown SHOW option "SER"
+USER1>SHOW USER
+USER is "USER1"
+USER1>SPOOL
+currently spooling to D20191010_SPOOL_3(PRIVILEGE).TXT
+USER1>UPDATE EMP
+  2  SET SAL = 100;
+UPDATE EMP
+       *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+USER1>CONN SCOTT/ORACLE
+Connected.
+SCOTT>GRANT UPDATE TO USER1;
+GRANT UPDATE TO USER1
+      *
+ERROR at line 1:
+ORA-01919: role 'UPDATE' does not exist 
+
+
+SCOTT>GRANT UPDATE ON TO USER1;
+GRANT UPDATE ON TO USER1
+                *
+ERROR at line 1:
+ORA-00903: invalid table name 
+
+
+SCOTT>GRANT UPDATE
+  2  ON EMP
+  3  TO USER1;
+
+Grant succeeded.
+
+SCOTT>CONN USER1/TIGER
+Connected.
+USER1>UPDATE SCOTT.EMP
+  2  SET SAL = 100;
+
+18 rows updated.
+
+USER1>ROLLBACK;
+
+Rollback complete.
+
+USER1>CONN SCOTT/TIGER
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+>CONN SCOTT/ORACLE
+Connected.
+SCOTT>REVOKE SELECT, UPDATE ON EMP FROM USER1;
+
+Revoke succeeded.
+
+SCOTT>CONN USER1/TIGER
+Connected.
+USER1>SELECT * FROM SCOTT.EMP;
+SELECT * FROM SCOTT.EMP
+                    *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+USER1>CONN SYS /AS SYSDBA
+Connected.
+SYS>REVOKE CONNECT, RESOURCE FROM USER1;
+
+Revoke succeeded.
+
+SYS>CONN USER1/TIGER
+ERROR:
+ORA-01045: user USER1 lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+>CONN USER1/ORACLE
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+>
+>
+>EXIT

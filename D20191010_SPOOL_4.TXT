@@ -1,0 +1,190 @@
+SQL> GRANT CONNECT, RESOURCE TO USER1
+  2  ;
+
+Grant succeeded.
+
+SQL> SET SQLPROMPT "_USER>"
+SYSTEM>CONN USER1/TIGER
+Connected.
+USER1>CONN SYSTEM/ORACLE
+Connected.
+SYSTEM>CREATE USER USER2
+  2  ;
+
+*
+ERROR at line 2:
+ORA-01938: IDENTIFIED BY must be specified for CREATE USER 
+
+
+SYSTEM>CREATE USER USER2
+  2  IDENTIFIED BY TIGER
+  3  PASSWORD EXPIRE
+  4  ACCOUNT UNLOCK;
+
+User created.
+
+SYSTEM>GRANT CONNECT, RESOURCE TO USER2;
+
+Grant succeeded.
+
+SYSTEM>CONNECT USER2/TIGER
+ERROR:
+ORA-28001: the password has expired 
+
+
+Changing password for USER2
+SP2-0650: New passwords do not match
+Password unchanged
+Warning: You are no longer connected to ORACLE.
+>CONN USER2/LION
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+>CONN USER2/lion
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+>CONN USER2/びちだぬ
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+>CONN SYSTEM/ORACLE
+Connected.
+SYSTEM>ALTER USER USER2
+  2  IDENTIFIED BY TIGER;
+
+User altered.
+
+SYSTEM>CONN USER2/TIGER
+Connected.
+USER2>PASSWORD
+Changing password for USER2
+Password changed
+USER2>SPOOL
+currently spooling to SPOOL_4.TXT
+USER2>
+USER2>CREATE TABLE EMP
+  2  (EMPNO NUMBER(4));
+
+Table created.
+
+USER2>INSERT INTO EMP VALUES(1111);
+
+1 row created.
+
+USER2>COMMIT;
+
+Commit complete.
+
+USER2>DESC EMP;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+
+USER2>
+USER2>
+USER2>CONN SYS /AS SYSDBA
+Connected.
+SYS>DROP USER USER2;
+DROP USER USER2
+*
+ERROR at line 1:
+ORA-01922: CASCADE must be specified to drop 'USER2' 
+
+
+SYS>DROP USER USER2 CASCADE;
+
+User dropped.
+
+SYS>DESC USER2
+ERROR:
+ORA-04043: object USER2 does not exist 
+
+
+SYS>SELECT * FROM ALL_USERS;
+
+USERNAME                          USER_ID CREATED                               
+------------------------------ ---------- ------------                          
+USER1                                  92 10-OCT-19                             
+BI                                     90 07-OCT-19                             
+PM                                     89 07-OCT-19                             
+SH                                     88 07-OCT-19                             
+IX                                     87 07-OCT-19                             
+OE                                     86 07-OCT-19                             
+HR                                     85 07-OCT-19                             
+SCOTT                                  84 30-MAR-10                             
+OWBSYS_AUDIT                           83 30-MAR-10                             
+OWBSYS                                 79 30-MAR-10                             
+APEX_030200                            78 30-MAR-10                             
+
+USERNAME                          USER_ID CREATED                               
+------------------------------ ---------- ------------                          
+APEX_PUBLIC_USER                       76 30-MAR-10                             
+FLOWS_FILES                            75 30-MAR-10                             
+MGMT_VIEW                              74 30-MAR-10                             
+SYSMAN                                 72 30-MAR-10                             
+SPATIAL_CSW_ADMIN_USR                  70 30-MAR-10                             
+SPATIAL_WFS_ADMIN_USR                  67 30-MAR-10                             
+MDDATA                                 65 30-MAR-10                             
+MDSYS                                  57 30-MAR-10                             
+SI_INFORMTN_SCHEMA                     56 30-MAR-10                             
+ORDPLUGINS                             55 30-MAR-10                             
+ORDDATA                                54 30-MAR-10                             
+
+USERNAME                          USER_ID CREATED                               
+------------------------------ ---------- ------------                          
+ORDSYS                                 53 30-MAR-10                             
+OLAPSYS                                61 30-MAR-10                             
+ANONYMOUS                              46 30-MAR-10                             
+XDB                                    45 30-MAR-10                             
+CTXSYS                                 43 30-MAR-10                             
+EXFSYS                                 42 30-MAR-10                             
+XS$NULL                        2147483638 30-MAR-10                             
+WMSYS                                  32 30-MAR-10                             
+APPQOSSYS                              31 30-MAR-10                             
+DBSNMP                                 30 30-MAR-10                             
+ORACLE_OCM                             21 30-MAR-10                             
+
+USERNAME                          USER_ID CREATED                               
+------------------------------ ---------- ------------                          
+DIP                                    14 30-MAR-10                             
+OUTLN                                   9 30-MAR-10                             
+SYSTEM                                  5 30-MAR-10                             
+SYS                                     0 30-MAR-10                             
+
+37 rows selected.
+
+SYS>CONN SYSTEM/ORACLE
+Connected.
+SYSTEM>ALTER USER SCOTT
+  2  ACOUNT LOCK;
+ACOUNT LOCK
+*
+ERROR at line 2:
+ORA-00922: missing or invalid option 
+
+
+SYSTEM>ALTER USER SCOTT
+  2  ACCOUNT LOCK;
+
+User altered.
+
+SYSTEM>
+SYSTEM>SELECT * FROM SCOTT.DEPT;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+SYSTEM>ALTER USER SCOTT
+  2  ACCOUNT UNLOCK;
+
+User altered.
+
+SYSTEM>EXIT
