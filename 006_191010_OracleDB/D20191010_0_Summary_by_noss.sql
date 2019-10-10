@@ -1,3 +1,56 @@
+#191010 정리본
+
+[팁]
+ALTER SESSION SET NLS_DATE_FORMAT = 'YY/MM/DD';
+SELECT SYSDATE FROM DUAL;
+------------------------------------------------------------------------
+# OBJECT
+- table	   : 1. 데이터딕셔너리 / 2. 유저정의테이블
+- index    : 접근에서 쓰임
+- view     : 
+- sequence : 자동 번호 생성기(대기표기계)
+- synonym  : 동의어, 대체이름(테이블, 뷰, 시퀀스, 프로시저등에 대한)
+------------------------------------------------------------------------
+SEQUENCE 에 대해서
+
+CREATE SEQUENCE DEPT_DEPTNO
+START WITH 1	-- 1부터
+INCREMENT BY 1	-- 1++
+MINVALUE 1
+MAXVALUE 100
+NOCYCLE
+NOCACHE;
+
+주 사용처 : 어플리케이션에서의 INSERT문
+
+
+# 생각
+테이블 하나에는 반드시 1개의 primary key가 존재해야한다. 
+(의미는 없더라도) (ex. 게시물 번호)
+동작되면서 발생하는 row들에 어떻게든 (중복x, null x)번호를 줘야해서
+
+------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY MM DD';
 select sysdate from dual;
 
