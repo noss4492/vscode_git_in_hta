@@ -1,0 +1,1359 @@
+SQL> CREATE SEQUENCE DEPT_DEPTNO
+  2  START WITH 1
+  3  NCREMENT BY 1
+  4  MINVALUE 1
+  5  MAXVALUE 100
+  6  NOCYCLE
+  7  NOCACHE;
+NCREMENT BY 1
+*
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> CREATE SEQUENCE DEPT_DEPTNO
+  2  START WITH 1
+  3  INCREMENT BY 1
+  4  MINVALUE 1
+  5  MAXVALUE 100
+  6  NOCYCLE
+  7  NOCACHE;
+
+Sequence created.
+
+SQL> SPPOL
+SP2-0042: unknown command "SPPOL" - rest of line ignored.
+SQL> SPOOL
+currently spooling to SPOOL_1.TXT
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> DESC DEPT_DEPTNO
+SP2-0381: DESCRIBE sequence is not available
+
+SQL> DESC DEPT_DEPTNO;
+SP2-0381: DESCRIBE sequence is not available
+
+SQL> DESC DEPT_DEPTNO
+SP2-0381: DESCRIBE sequence is not available
+
+SQL> DESC DEPT_DEPTNO;
+SP2-0381: DESCRIBE sequence is not available
+
+SQL> SELECT * FROM DEPT
+  2  ;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+INSERT INTO DEPT_VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울')
+                                             *
+ERROR at line 1:
+ORA-01747: invalid user.table.column, table.column, or column specification 
+
+
+SQL> DESC DEPT
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNO                                    NOT NULL NUMBER(2)
+ DNAME                                              VARCHAR2(14)
+ LOC                                                VARCHAR2(13)
+
+SQL> SELECT * FROM DEPT
+  2  ;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+SQL> INSERT INTO DEPT VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+
+1 row created.
+
+SQL> SELECT * FROM DEPT
+  2  ;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+         1 연구           서울                                                  
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+SQL> INSERT INTO DEPT VALUES(DEPT_DEPTNO.NEXTVAL, '연구', '서울');
+
+1 row created.
+
+SQL> SELECT * FROM DEPT;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+         1 연구           서울                                                  
+         2 연구           서울                                                  
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+6 rows selected.
+
+SQL> INSERT INTO EMP(EMPNO, ENAME, SAL, DEPTNO)
+  2  VALUES (DEPT_DEPTNO.NEXTVAL, 'AA', 3000, 10);
+
+1 row created.
+
+SQL> SELECT * FROM DEPT;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+         1 연구           서울                                                  
+         2 연구           서울                                                  
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+6 rows selected.
+
+SQL> SELECT * FROM EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+         3 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+15 rows selected.
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+         4       7369 SMITH                                                     
+         5       7499 ALLEN                                                     
+         6       7521 WARD                                                      
+         7       7566 JONES                                                     
+         8       7654 MARTIN                                                    
+         9       7698 BLAKE                                                     
+        10       7782 CLARK                                                     
+        11       7788 SCOTT                                                     
+        12       7839 KING                                                      
+        13       7844 TURNER                                                    
+        14       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        15       7900 JAMES                                                     
+        16       7902 FORD                                                      
+        17       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        18       7369 SMITH                                                     
+        19       7499 ALLEN                                                     
+        20       7521 WARD                                                      
+        21       7566 JONES                                                     
+        22       7654 MARTIN                                                    
+        23       7698 BLAKE                                                     
+        24       7782 CLARK                                                     
+        25       7788 SCOTT                                                     
+        26       7839 KING                                                      
+        27       7844 TURNER                                                    
+        28       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        29       7900 JAMES                                                     
+        30       7902 FORD                                                      
+        31       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        32       7369 SMITH                                                     
+        33       7499 ALLEN                                                     
+        34       7521 WARD                                                      
+        35       7566 JONES                                                     
+        36       7654 MARTIN                                                    
+        37       7698 BLAKE                                                     
+        38       7782 CLARK                                                     
+        39       7788 SCOTT                                                     
+        40       7839 KING                                                      
+        41       7844 TURNER                                                    
+        42       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        43       7900 JAMES                                                     
+        44       7902 FORD                                                      
+        45       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        46       7369 SMITH                                                     
+        47       7499 ALLEN                                                     
+        48       7521 WARD                                                      
+        49       7566 JONES                                                     
+        50       7654 MARTIN                                                    
+        51       7698 BLAKE                                                     
+        52       7782 CLARK                                                     
+        53       7788 SCOTT                                                     
+        54       7839 KING                                                      
+        55       7844 TURNER                                                    
+        56       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        57       7900 JAMES                                                     
+        58       7902 FORD                                                      
+        59       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        60       7369 SMITH                                                     
+        61       7499 ALLEN                                                     
+        62       7521 WARD                                                      
+        63       7566 JONES                                                     
+        64       7654 MARTIN                                                    
+        65       7698 BLAKE                                                     
+        66       7782 CLARK                                                     
+        67       7788 SCOTT                                                     
+        68       7839 KING                                                      
+        69       7844 TURNER                                                    
+        70       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        71       7900 JAMES                                                     
+        72       7902 FORD                                                      
+        73       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        74       7369 SMITH                                                     
+        75       7499 ALLEN                                                     
+        76       7521 WARD                                                      
+        77       7566 JONES                                                     
+        78       7654 MARTIN                                                    
+        79       7698 BLAKE                                                     
+        80       7782 CLARK                                                     
+        81       7788 SCOTT                                                     
+        82       7839 KING                                                      
+        83       7844 TURNER                                                    
+        84       7876 ADAMS                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        85       7900 JAMES                                                     
+        86       7902 FORD                                                      
+        87       7934 MILLER                                                    
+
+14 rows selected.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+ERROR:
+ORA-08004: sequence DEPT_DEPTNO.NEXTVAL exceeds MAXVALUE and cannot be
+instantiated 
+
+
+
+no rows selected
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+*
+ERROR at line 1:
+ORA-08004: sequence DEPT_DEPTNO.NEXTVAL exceeds MAXVALUE and cannot be
+instantiated 
+
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+*
+ERROR at line 1:
+ORA-08004: sequence DEPT_DEPTNO.NEXTVAL exceeds MAXVALUE and cannot be
+instantiated 
+
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+*
+ERROR at line 1:
+ORA-08004: sequence DEPT_DEPTNO.NEXTVAL exceeds MAXVALUE and cannot be
+instantiated 
+
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+*
+ERROR at line 1:
+ORA-08004: sequence DEPT_DEPTNO.NEXTVAL exceeds MAXVALUE and cannot be
+instantiated 
+
+
+SQL> DESC USER_SEQUENCES;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SEQUENCE_NAME                             NOT NULL VARCHAR2(30)
+ MIN_VALUE                                          NUMBER
+ MAX_VALUE                                          NUMBER
+ INCREMENT_BY                              NOT NULL NUMBER
+ CYCLE_FLAG                                         VARCHAR2(1)
+ ORDER_FLAG                                         VARCHAR2(1)
+ CACHE_SIZE                                NOT NULL NUMBER
+ LAST_NUMBER                               NOT NULL NUMBER
+
+SQL> SELECT * FROM USER_SEQUENCES;
+
+SEQUENCE_NAME                   MIN_VALUE  MAX_VALUE INCREMENT_BY C O CACHE_SIZE
+------------------------------ ---------- ---------- ------------ - - ----------
+LAST_NUMBER                                                                     
+-----------                                                                     
+DEPT_DEPTNO                             1        100            1 N N          0
+        101                                                                     
+                                                                                
+
+SQL> ALTER SEQUENCE DEPT_DEPTNO
+  2  CYCLE;
+
+Sequence altered.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMP1_EMPNO_PK
+  2  FROM EMP;
+SELECT DEPT_DEPTNO.NEXTVAL, EMP1_EMPNO_PK
+                            *
+ERROR at line 1:
+ORA-00904: "EMP1_EMPNO_PK": invalid identifier 
+
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMP_EMPNO_PK
+  2  FROM EM
+  3  
+SQL> 
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO                                                           
+---------- ----------                                                           
+         1       7369                                                           
+         2       7499                                                           
+         3       7521                                                           
+         4       7566                                                           
+         5       7654                                                           
+         6       7698                                                           
+         7       7782                                                           
+         8       7788                                                           
+         9       7839                                                           
+        10       7844                                                           
+        11       7876                                                           
+
+   NEXTVAL      EMPNO                                                           
+---------- ----------                                                           
+        12       7900                                                           
+        13       7902                                                           
+        14       7934                                                           
+
+14 rows selected.
+
+SQL> INSERT INTO EMP(EMPNO, ENAME, SAL, DEPTNO)
+  2  VALUES (DEPT_DEPTNO.NEXTVAL, 'AA', 3000, 10);
+
+1 row created.
+
+SQL> INSERT INTO EMP(EMPNO, ENAME, SAL, DEPTNO)
+  2  VALUES (DEPT_DEPTNO.NEXTVAL, 'AA', 3000, 10);
+
+1 row created.
+
+SQL> INSERT INTO EMP(EMPNO, ENAME, SAL, DEPTNO)
+  2  VALUES (DEPT_DEPTNO.NEXTVAL, 'AA', 3000, 10);
+
+1 row created.
+
+SQL> INSERT INTO EMP(EMPNO, ENAME, SAL, DEPTNO)
+  2  VALUES (DEPT_DEPTNO.NEXTVAL, 'AA', 3000, 10);
+
+1 row created.
+
+SQL> SELECT DEPT_DEPTNO.NEXTVAL, EMPNO, ENAME
+  2  FROM EMP;
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        19         15 AA                                                        
+        20         16 AA                                                        
+        21         17 AA                                                        
+        22         18 AA                                                        
+        23       7369 SMITH                                                     
+        24       7499 ALLEN                                                     
+        25       7521 WARD                                                      
+        26       7566 JONES                                                     
+        27       7654 MARTIN                                                    
+        28       7698 BLAKE                                                     
+        29       7782 CLARK                                                     
+
+   NEXTVAL      EMPNO ENAME                                                     
+---------- ---------- ----------                                                
+        30       7788 SCOTT                                                     
+        31       7839 KING                                                      
+        32       7844 TURNER                                                    
+        33       7876 ADAMS                                                     
+        34       7900 JAMES                                                     
+        35       7902 FORD                                                      
+        36       7934 MILLER                                                    
+
+18 rows selected.
+
+SQL> DROP SEQUENCE DEPT_DEPTNO;
+
+Sequence dropped.
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> 
+SQL> 
+SQL> select ronum, rowid, empno
+  2  from emp;
+select ronum, rowid, empno
+       *
+ERROR at line 1:
+ORA-00904: "RONUM": invalid identifier 
+
+
+SQL> SELECT RONUM, ROWID, EMPNO
+  2  FROM EMP;
+SELECT RONUM, ROWID, EMPNO
+       *
+ERROR at line 1:
+ORA-00904: "RONUM": invalid identifier 
+
+
+SQL> SELECT ROWNUM, ROWID, EMPNO
+  2  FROM EMP;
+
+    ROWNUM ROWID                   EMPNO                                        
+---------- ------------------ ----------                                        
+         1 AAAR3sAAEAAAACUAAA         15                                        
+         2 AAAR3sAAEAAAACUAAB         16                                        
+         3 AAAR3sAAEAAAACUAAC         17                                        
+         4 AAAR3sAAEAAAACUAAD         18                                        
+         5 AAAR3sAAEAAAACXAAA       7369                                        
+         6 AAAR3sAAEAAAACXAAB       7499                                        
+         7 AAAR3sAAEAAAACXAAC       7521                                        
+         8 AAAR3sAAEAAAACXAAD       7566                                        
+         9 AAAR3sAAEAAAACXAAE       7654                                        
+        10 AAAR3sAAEAAAACXAAF       7698                                        
+        11 AAAR3sAAEAAAACXAAG       7782                                        
+
+    ROWNUM ROWID                   EMPNO                                        
+---------- ------------------ ----------                                        
+        12 AAAR3sAAEAAAACXAAH       7788                                        
+        13 AAAR3sAAEAAAACXAAI       7839                                        
+        14 AAAR3sAAEAAAACXAAJ       7844                                        
+        15 AAAR3sAAEAAAACXAAK       7876                                        
+        16 AAAR3sAAEAAAACXAAL       7900                                        
+        17 AAAR3sAAEAAAACXAAM       7902                                        
+        18 AAAR3sAAEAAAACXAAN       7934                                        
+
+18 rows selected.
+
+SQL> SELECT EMPNO, ENAME, SAL
+  2  FROM EMP
+  3  WHERE ROWID='AAAR3sAAEAAAACXAAL';
+
+     EMPNO ENAME             SAL                                                
+---------- ---------- ----------                                                
+      7900 JAMES             950                                                
+
+SQL> SELECT ROWNUM, ROWID, EMPNO
+  2    2  FROM EMP;SELECT ROWNUM, ROWID, EMPNO
+  3    2  FROM EMP;SELECT ROWNUM, ROWID, EMPNO
+  4  SELECT (SELECT ROWID
+  5  		FROM EMP
+  6  		WHERE ENAME = 'SMITH'), ROWID, EMPNO
+  7  FROM EMP;
+  2  FROM EMP;SELECT ROWNUM, ROWID, EMPNO
+  *
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> 
+SQL> SELECT (SELECT ROWID
+  2  		FROM EMP
+  3  		WHERE ENAME = 'SMITH'), EMPNO
+  4  FROM EMP;
+
+(SELECTROWIDFROMEM      EMPNO                                                   
+------------------ ----------                                                   
+AAAR3sAAEAAAACXAAA         15                                                   
+AAAR3sAAEAAAACXAAA         16                                                   
+AAAR3sAAEAAAACXAAA         17                                                   
+AAAR3sAAEAAAACXAAA         18                                                   
+AAAR3sAAEAAAACXAAA       7369                                                   
+AAAR3sAAEAAAACXAAA       7499                                                   
+AAAR3sAAEAAAACXAAA       7521                                                   
+AAAR3sAAEAAAACXAAA       7566                                                   
+AAAR3sAAEAAAACXAAA       7654                                                   
+AAAR3sAAEAAAACXAAA       7698                                                   
+AAAR3sAAEAAAACXAAA       7782                                                   
+
+(SELECTROWIDFROMEM      EMPNO                                                   
+------------------ ----------                                                   
+AAAR3sAAEAAAACXAAA       7788                                                   
+AAAR3sAAEAAAACXAAA       7839                                                   
+AAAR3sAAEAAAACXAAA       7844                                                   
+AAAR3sAAEAAAACXAAA       7876                                                   
+AAAR3sAAEAAAACXAAA       7900                                                   
+AAAR3sAAEAAAACXAAA       7902                                                   
+AAAR3sAAEAAAACXAAA       7934                                                   
+
+18 rows selected.
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM EMP
+  3  		WHERE ENAME = 'SMITH'), EMPNO, ENAME, ROWID
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH'), EMPNO, ENAME, ROWID
+		                               *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM EMP
+  3  		WHERE ENAME = 'SMITH'), ROWID
+  4  FROM EMP;
+
+(SELECTROWIDFROMEM ROWID                                                        
+------------------ ------------------                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACUAAA                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACUAAB                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACUAAC                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACUAAD                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAA                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAB                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAC                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAD                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAE                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAF                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAG                                           
+
+(SELECTROWIDFROMEM ROWID                                                        
+------------------ ------------------                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAH                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAI                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAJ                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAK                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAL                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAM                                           
+AAAR3sAAEAAAACXAAA AAAR3sAAEAAAACXAAN                                           
+
+18 rows selected.
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM EMP
+  3  		WHERE ENAME = 'SMITH')
+  4  FROM EMP;
+
+(SELECTROWIDFROMEM                                                              
+------------------                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+
+(SELECTROWIDFROMEM                                                              
+------------------                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+AAAR3sAAEAAAACXAAA                                                              
+
+18 rows selected.
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH'), ENAME, EMPNO
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH'), ENAME, EMPNO
+		                               *
+ERROR at line 3:
+ORA-00904: "EMPNO": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH'), ENAME
+  4  FROM EMP;
+
+(SELECTROWIDFROMDU ENAME                                                        
+------------------ ----------                                                   
+                   AA                                                           
+                   AA                                                           
+                   AA                                                           
+                   AA                                                           
+AAAAB0AABAAAAOhAAA SMITH                                                        
+                   ALLEN                                                        
+                   WARD                                                         
+                   JONES                                                        
+                   MARTIN                                                       
+                   BLAKE                                                        
+                   CLARK                                                        
+
+(SELECTROWIDFROMDU ENAME                                                        
+------------------ ----------                                                   
+                   SCOTT                                                        
+                   KING                                                         
+                   TURNER                                                       
+                   ADAMS                                                        
+                   JAMES                                                        
+                   FORD                                                         
+                   MILLER                                                       
+
+18 rows selected.
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH'), ENAME
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH'), ENAME
+		                        *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH')
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH')
+		      *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH')
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH')
+		      *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH')
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH')
+		      *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT (SELECT ROWID
+  2  		FROM DUAL
+  3  		WHERE ENAME = 'SMITH')
+  4  FROM DUAL;
+		WHERE ENAME = 'SMITH')
+		      *
+ERROR at line 3:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> SELECT EMPNO, ENAME, SAL
+  2  FROM EMP
+  3  WHERE ENAME = 'SCOTT';
+
+     EMPNO ENAME             SAL                                                
+---------- ---------- ----------                                                
+      7788 SCOTT            3000                                                
+
+SQL> CREATE INDEX IDX_EMP_ENAME
+  2  ON EMP(ENAME);
+
+Index created.
+
+SQL> SELECT * FROM IDX_EMP_ENAME;
+SELECT * FROM IDX_EMP_ENAME
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DESC IDX_EMP_ENAME;
+ERROR:
+ORA-04043: object IDX_EMP_ENAME does not exist 
+
+
+SQL> SELECT EMPNO, ENAME, SAL
+  2  FROM EMP
+  3  WHERE ENAME = 'SCOTT';
+
+     EMPNO ENAME             SAL                                                
+---------- ---------- ----------                                                
+      7788 SCOTT            3000                                                
+
+SQL> conn sys/oracle as sysdba
+Connected.
+SQL> col sqlprompt "_USER>"
+SP2-0158: unknown COLUMN option ""_USER>""
+SQL> conn scott/tiger
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> conn scott/ORACLE
+Connected.
+SQL> set autotrace on
+SP2-0618: Cannot find the Session Identifier.  Check PLUSTRACE role is enabled
+SP2-0611: Error enabling STATISTICS report
+SQL> conn sys/oracle as sysdba
+Connected.
+SQL> show user
+USER is "SYS"
+SQL> @c:\app\ln4so\product\11.2.0\dbhome_1\sqlplus\admin\plustrce.sql
+SQL> 
+SQL> drop role plustrace;
+drop role plustrace
+          *
+ERROR at line 1:
+ORA-01919: role 'PLUSTRACE' does not exist 
+
+
+SQL> create role plustrace;
+
+Role created.
+
+SQL> 
+SQL> grant select on v_$sesstat to plustrace;
+
+Grant succeeded.
+
+SQL> grant select on v_$statname to plustrace;
+
+Grant succeeded.
+
+SQL> grant select on v_$mystat to plustrace;
+
+Grant succeeded.
+
+SQL> grant plustrace to dba with admin option;
+
+Grant succeeded.
+
+SQL> 
+SQL> set echo off
+SQL> grant plustrace to scott;
+
+Grant succeeded.
+
+SQL> set autotrace on
+SQL> select * from emp;
+select * from emp
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> conn scott/ORACLE
+Connected.
+SQL> select * from emp;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> set autotrace on
+SQL> ;
+  1* select * from emp
+SQL> select * from emp;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 3956160932                                                     
+                                                                                
+--------------------------------------------------------------------------      
+| Id  | Operation         | Name | Rows  | Bytes | Cost (%CPU)| Time     |      
+--------------------------------------------------------------------------      
+|   0 | SELECT STATEMENT  |      |    14 |   532 |     3   (0)| 00:00:01 |      
+|   1 |  TABLE ACCESS FULL| EMP  |    14 |   532 |     3   (0)| 00:00:01 |      
+--------------------------------------------------------------------------      
+
+
+Statistics
+----------------------------------------------------------                      
+          0  recursive calls                                                    
+          0  db block gets                                                      
+          9  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+       1902  bytes sent via SQL*Net to client                                   
+        530  bytes received via SQL*Net from client                             
+          3  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+         18  rows processed                                                     
+
+SQL> 
+SQL> 
+SQL> select empno, ename, sal
+  2  from emp
+  3  where ename = 'scott';
+
+no rows selected
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 3977601012                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+| Id  | Operation                   | Name          | Rows  | Bytes | Cost (%CPU
+)| Time     |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+|   0 | SELECT STATEMENT            |               |     1 |    14 |     2   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMP           |     1 |    14 |     2   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|*  2 |   INDEX RANGE SCAN          | IDX_EMP_ENAME |     1 |       |     1   (0
+)| 00:00:01 |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   2 - access("ENAME"='scott')                                                  
+
+
+Statistics
+----------------------------------------------------------                      
+          1  recursive calls                                                    
+          0  db block gets                                                      
+          1  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+        465  bytes sent via SQL*Net to client                                   
+        508  bytes received via SQL*Net from client                             
+          1  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          0  rows processed                                                     
+
+SQL> spool off

@@ -1,0 +1,822 @@
+SQL> SET AUTOTRACE OFF
+SQL> DESC USER_INDEXES;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ INDEX_NAME                                NOT NULL VARCHAR2(30)
+ INDEX_TYPE                                         VARCHAR2(27)
+ TABLE_OWNER                               NOT NULL VARCHAR2(30)
+ TABLE_NAME                                NOT NULL VARCHAR2(30)
+ TABLE_TYPE                                         VARCHAR2(11)
+ UNIQUENESS                                         VARCHAR2(9)
+ COMPRESSION                                        VARCHAR2(8)
+ PREFIX_LENGTH                                      NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ INI_TRANS                                          NUMBER
+ MAX_TRANS                                          NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                                        NUMBER
+ MAX_EXTENTS                                        NUMBER
+ PCT_INCREASE                                       NUMBER
+ PCT_THRESHOLD                                      NUMBER
+ INCLUDE_COLUMN                                     NUMBER
+ FREELISTS                                          NUMBER
+ FREELIST_GROUPS                                    NUMBER
+ PCT_FREE                                           NUMBER
+ LOGGING                                            VARCHAR2(3)
+ BLEVEL                                             NUMBER
+ LEAF_BLOCKS                                        NUMBER
+ DISTINCT_KEYS                                      NUMBER
+ AVG_LEAF_BLOCKS_PER_KEY                            NUMBER
+ AVG_DATA_BLOCKS_PER_KEY                            NUMBER
+ CLUSTERING_FACTOR                                  NUMBER
+ STATUS                                             VARCHAR2(8)
+ NUM_ROWS                                           NUMBER
+ SAMPLE_SIZE                                        NUMBER
+ LAST_ANALYZED                                      DATE
+ DEGREE                                             VARCHAR2(40)
+ INSTANCES                                          VARCHAR2(40)
+ PARTITIONED                                        VARCHAR2(3)
+ TEMPORARY                                          VARCHAR2(1)
+ GENERATED                                          VARCHAR2(1)
+ SECONDARY                                          VARCHAR2(1)
+ BUFFER_POOL                                        VARCHAR2(7)
+ FLASH_CACHE                                        VARCHAR2(7)
+ CELL_FLASH_CACHE                                   VARCHAR2(7)
+ USER_STATS                                         VARCHAR2(3)
+ DURATION                                           VARCHAR2(15)
+ PCT_DIRECT_ACCESS                                  NUMBER
+ ITYP_OWNER                                         VARCHAR2(30)
+ ITYP_NAME                                          VARCHAR2(30)
+ PARAMETERS                                         VARCHAR2(1000)
+ GLOBAL_STATS                                       VARCHAR2(3)
+ DOMIDX_STATUS                                      VARCHAR2(12)
+ DOMIDX_OPSTATUS                                    VARCHAR2(6)
+ FUNCIDX_STATUS                                     VARCHAR2(8)
+ JOIN_INDEX                                         VARCHAR2(3)
+ IOT_REDUNDANT_PKEY_ELIM                            VARCHAR2(3)
+ DROPPED                                            VARCHAR2(3)
+ VISIBILITY                                         VARCHAR2(9)
+ DOMIDX_MANAGEMENT                                  VARCHAR2(14)
+ SEGMENT_CREATED                                    VARCHAR2(3)
+
+SQL> SELECT INDEX_NAME, INDEX_TYPE, TABLE_NAME, UNIQUENESS
+  2  FROM USER_INDEXES;
+
+INDEX_NAME                     INDEX_TYPE                                       
+------------------------------ ---------------------------                      
+TABLE_NAME                     UNIQUENES                                        
+------------------------------ ---------                                        
+HW_CUST_ID_PK                  NORMAL                                           
+HW_CUST                        UNIQUE                                           
+                                                                                
+EMP1_EMPNO_PK                  NORMAL                                           
+EMP1                           UNIQUE                                           
+                                                                                
+PK_EMP                         NORMAL                                           
+EMP                            UNIQUE                                           
+                                                                                
+
+INDEX_NAME                     INDEX_TYPE                                       
+------------------------------ ---------------------------                      
+TABLE_NAME                     UNIQUENES                                        
+------------------------------ ---------                                        
+IDX_EMP_ENAME                  NORMAL                                           
+EMP                            NONUNIQUE                                        
+                                                                                
+SYS_C0011053                   NORMAL                                           
+DEPT1                          UNIQUE                                           
+                                                                                
+SYS_C0011054                   NORMAL                                           
+DEPT1                          UNIQUE                                           
+                                                                                
+
+INDEX_NAME                     INDEX_TYPE                                       
+------------------------------ ---------------------------                      
+TABLE_NAME                     UNIQUENES                                        
+------------------------------ ---------                                        
+PK_DEPT                        NORMAL                                           
+DEPT                           UNIQUE                                           
+                                                                                
+
+7 rows selected.
+
+SQL> 
+SQL> DROP INDEX PK_DEPT;
+DROP INDEX PK_DEPT
+           *
+ERROR at line 1:
+ORA-02429: cannot drop index used for enforcement of unique/primary key 
+
+
+SQL> COL "INDEX_NAME" A13
+SP2-0158: unknown COLUMN option "A13"
+SQL> COL "INDEX_NAME" FORMAT A13
+SQL> COL "INDEX_TYPE" A8
+SP2-0158: unknown COLUMN option "A8"
+SQL> COL "INDEX_TYPE" FORMAT A8
+SQL> SELECT INDEX_NAME, INDEX_TYPE, TABLE_NAME, UNIQUENESS
+  2  FROM USER_INDEXES;
+
+INDEX_NAME    INDEX_TY TABLE_NAME                     UNIQUENES                 
+------------- -------- ------------------------------ ---------                 
+HW_CUST_ID_PK NORMAL   HW_CUST                        UNIQUE                    
+EMP1_EMPNO_PK NORMAL   EMP1                           UNIQUE                    
+PK_EMP        NORMAL   EMP                            UNIQUE                    
+IDX_EMP_ENAME NORMAL   EMP                            NONUNIQUE                 
+SYS_C0011053  NORMAL   DEPT1                          UNIQUE                    
+SYS_C0011054  NORMAL   DEPT1                          UNIQUE                    
+PK_DEPT       NORMAL   DEPT                           UNIQUE                    
+
+7 rows selected.
+
+SQL> 
+SQL> SELECT EMPNO, ENAME, SAL, JOB
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER';
+
+     EMPNO ENAME             SAL JOB                                            
+---------- ---------- ---------- ---------                                      
+      7566 JONES            2975 MANAGER                                        
+      7698 BLAKE            2850 MANAGER                                        
+      7782 CLARK            2450 MANAGER                                        
+
+SQL> CREATE INDEX IDX_EMP_JOB
+  2  ON EMP(JOB);
+
+Index created.
+
+SQL> AUTOTRACE ON
+SP2-0734: unknown command beginning "AUTOTRACE ..." - rest of line ignored.
+SQL> SET AUTOTRACE ON
+SQL> ;
+  1  CREATE INDEX IDX_EMP_JOB
+  2* ON EMP(JOB)
+SQL> SELECT *
+  2  FROM EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 3956160932                                                     
+                                                                                
+--------------------------------------------------------------------------      
+| Id  | Operation         | Name | Rows  | Bytes | Cost (%CPU)| Time     |      
+--------------------------------------------------------------------------      
+|   0 | SELECT STATEMENT  |      |    14 |   532 |     3   (0)| 00:00:01 |      
+|   1 |  TABLE ACCESS FULL| EMP  |    14 |   532 |     3   (0)| 00:00:01 |      
+--------------------------------------------------------------------------      
+
+
+Statistics
+----------------------------------------------------------                      
+          1  recursive calls                                                    
+          0  db block gets                                                      
+          9  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+       1902  bytes sent via SQL*Net to client                                   
+        530  bytes received via SQL*Net from client                             
+          3  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+         18  rows processed                                                     
+
+SQL> SELECT INDEX_NAME, INDEX_TYPE, TABLE_NAME, UNIQUENESS
+  2  FROM USER_INDEXES;
+
+INDEX_NAME    INDEX_TY TABLE_NAME                     UNIQUENES                 
+------------- -------- ------------------------------ ---------                 
+HW_CUST_ID_PK NORMAL   HW_CUST                        UNIQUE                    
+EMP1_EMPNO_PK NORMAL   EMP1                           UNIQUE                    
+PK_EMP        NORMAL   EMP                            UNIQUE                    
+IDX_EMP_JOB   NORMAL   EMP                            NONUNIQUE                 
+IDX_EMP_ENAME NORMAL   EMP                            NONUNIQUE                 
+SYS_C0011053  NORMAL   DEPT1                          UNIQUE                    
+SYS_C0011054  NORMAL   DEPT1                          UNIQUE                    
+PK_DEPT       NORMAL   DEPT                           UNIQUE                    
+
+8 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------                      
+ERROR:
+ORA-01039: insufficient privileges on underlying objects of the view 
+
+
+SP2-0612: Error generating AUTOTRACE EXPLAIN report
+
+Statistics
+----------------------------------------------------------                      
+          0  recursive calls                                                    
+          0  db block gets                                                      
+       2077  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+        990  bytes sent via SQL*Net to client                                   
+        519  bytes received via SQL*Net from client                             
+          2  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          8  rows processed                                                     
+
+SQL> SET AUTOTRACE OFF
+SQL> SET AUTOTRACE ON
+SQL> SELECT EMPNO, ENAME, SAL, JOB
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER';
+
+     EMPNO ENAME             SAL JOB                                            
+---------- ---------- ---------- ---------                                      
+      7566 JONES            2975 MANAGER                                        
+      7698 BLAKE            2850 MANAGER                                        
+      7782 CLARK            2450 MANAGER                                        
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 3286489891                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-----------                                                                     
+                                                                                
+| Id  | Operation                   | Name        | Rows  | Bytes | Cost (%CPU)|
+ Time     |                                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-----------                                                                     
+                                                                                
+|   0 | SELECT STATEMENT            |             |     3 |    66 |     2   (0)|
+ 00:00:01 |                                                                     
+                                                                                
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMP         |     3 |    66 |     2   (0)|
+ 00:00:01 |                                                                     
+                                                                                
+|*  2 |   INDEX RANGE SCAN          | IDX_EMP_JOB |     3 |       |     1   (0)|
+ 00:00:01 |                                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-----------                                                                     
+                                                                                
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   2 - access("JOB"='MANAGER')                                                  
+
+
+Statistics
+----------------------------------------------------------                      
+          1  recursive calls                                                    
+          0  db block gets                                                      
+          4  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+        831  bytes sent via SQL*Net to client                                   
+        519  bytes received via SQL*Net from client                             
+          2  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          3  rows processed                                                     
+
+SQL> SET AUTOTRACE OFF
+SQL> DROP INDEX IDX_EMP_JOB;
+
+Index dropped.
+
+SQL> SET AUTOTRACE ON
+SQL> SELECT EMPNO, ENAME, SAL, JOB
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER';
+
+     EMPNO ENAME             SAL JOB                                            
+---------- ---------- ---------- ---------                                      
+      7566 JONES            2975 MANAGER                                        
+      7698 BLAKE            2850 MANAGER                                        
+      7782 CLARK            2450 MANAGER                                        
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 3956160932                                                     
+                                                                                
+--------------------------------------------------------------------------      
+| Id  | Operation         | Name | Rows  | Bytes | Cost (%CPU)| Time     |      
+--------------------------------------------------------------------------      
+|   0 | SELECT STATEMENT  |      |     3 |    66 |     3   (0)| 00:00:01 |      
+|*  1 |  TABLE ACCESS FULL| EMP  |     3 |    66 |     3   (0)| 00:00:01 |      
+--------------------------------------------------------------------------      
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   1 - filter("JOB"='MANAGER')                                                  
+
+
+Statistics
+----------------------------------------------------------                      
+        222  recursive calls                                                    
+          0  db block gets                                                      
+         52  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+        831  bytes sent via SQL*Net to client                                   
+        519  bytes received via SQL*Net from client                             
+          2  SQL*Net roundtrips to/from client                                  
+          6  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          3  rows processed                                                     
+
+SQL> CONN SYS /AS SYSDBA
+Connected.
+SQL> GRANT CREATE SYNONYM TO SCOTT;
+
+Grant succeeded.
+
+SQL> CONN SCOTT/ORACLE;
+Connected.
+SQL> CREATE synonym E1
+  2  FOR EMP;
+
+Synonym created.
+
+SQL> SELECT * FROM E1;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> DESC E1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(4)
+ ENAME                                              VARCHAR2(10)
+ JOB                                                VARCHAR2(9)
+ MGR                                                NUMBER(4)
+ HIREDATE                                           DATE
+ SAL                                                NUMBER(7,2)
+ COMM                                               NUMBER(7,2)
+ DEPTNO                                             NUMBER(2)
+
+SQL> SELECT * FROM EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> SELECT * FROM E1;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> DROP SYNONYM E1;
+
+Synonym dropped.
+
+SQL> SELECT * FROM EMP;
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        15 AA                                                 3000              
+        10                                                                      
+                                                                                
+        16 AA                                                 3000              
+        10                                                                      
+                                                                                
+        17 AA                                                 3000              
+        10                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+        18 AA                                                 3000              
+        10                                                                      
+                                                                                
+      7369 SMITH      CLERK           7902 17-DEC-80           200              
+        20                                                                      
+                                                                                
+      7499 ALLEN      SALESMAN        7698 20-FEB-81          1600        300   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7521 WARD       SALESMAN        7698 22-FEB-81          1250        500   
+        30                                                                      
+                                                                                
+      7566 JONES      MANAGER         7839 02-APR-81          2975              
+        20                                                                      
+                                                                                
+      7654 MARTIN     SALESMAN        7698 28-SEP-81          1250       1400   
+        30                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7698 BLAKE      MANAGER         7839 01-MAY-81          2850              
+        30                                                                      
+                                                                                
+      7782 CLARK      MANAGER         7839 09-JUN-81          2450              
+        10                                                                      
+                                                                                
+      7788 SCOTT      ANALYST         7566 19-APR-87          3000        100   
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7839 KING       PRESIDENT            17-NOV-81          5000              
+        10                                                                      
+                                                                                
+      7844 TURNER     SALESMAN        7698 08-SEP-81          1500          0   
+        30                                                                      
+                                                                                
+      7876 ADAMS      CLERK           7788 23-MAY-87          1100              
+        20                                                                      
+                                                                                
+
+     EMPNO ENAME      JOB              MGR HIREDATE            SAL       COMM   
+---------- ---------- --------- ---------- ------------ ---------- ----------   
+    DEPTNO                                                                      
+----------                                                                      
+      7900 JAMES      CLERK           7698 03-DEC-81           950              
+        30                                                                      
+                                                                                
+      7902 FORD       ANALYST         7566 03-DEC-81          3000              
+        20                                                                      
+                                                                                
+      7934 MILLER     CLERK           7782 23-JAN-82          1300              
+        10                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> CREATE USER USER1
+  2  IDENTIFIED BY TIGER;
+IDENTIFIED BY TIGER
+              *
+ERROR at line 2:
+ORA-01031: insufficient privileges 
+
+
+SQL> CONN SYS /AS SYSDBA
+Connected.
+SQL> CREATE USER USER1
+  2  IDENTIFIED BY TIGER;
+
+User created.
+
+SQL> 
+SQL> CONNECT USER1/TIGER
+ERROR:
+ORA-01045: user USER1 lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> SPOOL
+currently spooling to SPOOL_2(INDEX_END).TXT
+SQL> SPOOL OFF
