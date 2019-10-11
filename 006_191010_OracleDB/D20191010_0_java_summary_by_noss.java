@@ -7,8 +7,20 @@
 /*
 java 환경설정
 1. Java SE 8u221 설치
-2. 환경변수 설정 (path에 추가 C:\Program Files\Java\jdk1.8.0_221\bin)
+2. 환경변수 설정 
+(변수 추가 : path에 추가 C:\Program Files\Java\jdk1.8.0_221\bin)
+(변수 추가 : CLASSPATH 값.)
 path.. 고통받았었었음...
+eclipse-jee-2019-09-R-win32-x86_64.zip 받자 (엔터프라이즈)
+
+헐 인텔리j랑 파이참 에듀케이션버전 공짜임
+
+IDE
+netBeans
+Eclipes
+intellij
+
+
 */
 
 /*
@@ -27,10 +39,16 @@ Z:\>dir
 Z:\>java Hello
 Hello World
 
-IDE
-netBeans
-Eclipes
-intellij
 
 
 */
+
+
+package basic;
+
+public class Hello {
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+	}
+}
+//
