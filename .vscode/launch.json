@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - VarEx3",
+            "request": "launch",
+            "mainClass": "VarEx3",
+            "projectName": "vscode_git_in_hta_ff9a735c"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Hello",
             "request": "launch",
             "mainClass": "Hello",

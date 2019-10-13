@@ -44,11 +44,12 @@ Hello World
 */
 
 
-package basic;
 
-public class Hello {
-	public static void main(String[] args) {
-		System.out.println("Hello World");
-	}
-}
-//
+
+변수
+primitive type => 정수형
+reference type => 
+
+
+
+
