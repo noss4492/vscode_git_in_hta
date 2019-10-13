@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - ok",
+            "request": "launch",
+            "mainClass": "ok",
+            "projectName": "vscode_git_in_hta_ff9a735c"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - test_hello",
             "request": "launch",
             "mainClass": "test_hello",
