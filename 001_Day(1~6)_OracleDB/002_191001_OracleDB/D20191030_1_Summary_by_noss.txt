@@ -1,0 +1,272 @@
+## 1. 그날 수업 복습
+
+#1일차 리마인드+a
+
+SELECT column, *, 연산식, alias, 문자열, distinct
+FROM 테이블명
+WHERE condition
+	1. 비교연산자
+	2. 논리연산자
+(NOT 붙여 쓰기 가능)
+	3. BETWEEN 작은수 AND 큰수
+	4. IN (,,,,,)로 SELECT AND AND AND 대체 가능
+        5. LIKE 문자열
+	6. IS NULL
+
+# SQL, SQL*PLUS 차이
+SQL 
+ANSI 표준 O
+축약형 사용 X
+SELECT 같은 애들
+;로 종결됨
+----
+변수 X
+(영어 어순의)언어 구조
+버퍼 사용
+
+SQLPLUS
+ORACLE사의 SW제품임
+축약형 사용 O
+DESC, SAVE, SPOOL 같은 애들
+;로 문장 종결되지 않아도 됨
+버퍼 없음
+
+[팁]
+ED 	  (EDIT, SQLPLUS의 명렁어임)
+/, R, RUN (버퍼내 명령 실행)
+이걸로 빠른 수정이 가능하다.
+편집시 주의사항
+1. 반드시 1개의 SQL문만 가능
+2. SQL*PLUS 명령은 사용할 수 없음
+3. 문장종결자 ; 대신에 /이 대신함
+
+WHERE의 조건절에서 column IS NULL이라는 용법으로 NULL인 row를 찾을 수 있다.
+
+# function
+1. single row function   (single input, single output)
+2. multiple row function (multiple input, single output)
+
+1. 문자 대소
+#UPPER(컬럼), LOWER(컬럼), INITCAP(컬럼)
+대문자로, 소문자로, INITIAL만 대문자로
+
+2. 문자 조작
+#SUBSTR(컬럼명, 1,4), SUBSTR(컬럼명,5)
+INDEX 1부터 4까지의 문자열 서브스트링, 5부터 마지막까지 
+#LENGTH(ENAME)
+문자열 길이
+#INSTR(컬럼명, 'A')
+#INSTR(string, substring [, start_position [, th_appearance ] ] )
+이거 문자 하나만이 아니라 substring까지 볼 수 있구나
+몇번째 위치에 있는지 알려줌 (SCOTT의 경우 CO로 INSTR하면 INDEX 2가 반환됨)
+#LPAD(컬럼, 10, '패딩영역을 채울 문자열')
+열너비 10으로 설정한 후 빈 공간을 패딩한다.LEFT에 패딩영역을 생성
+얘도 마찬가지로 문자열 가능
+RPAD는 반대로 RIGHT에 패딩영역을 생성
+#CONCAT(컬럼명1, 컬럼명2)
+문자열 붙이는 Concatenation 기능
+#ROUND(실수, 2)
+소숫점 2의 자리까지 반올림, 십의 자리 이상에서 쓰고 싶으면 음수처리하자.
+#TRUNC(실수, 2)
+마찬가지로 소숫점 2의 자리까지 절삭, Truncation 기능
+#MOD()
+정수론에서 사용되는 모듈러
+#SELECT SYSDATE
+시스템데이트(시간까지 내포하고 있음)
+#MONTHS_BETWEEN(SYSDATE, 컬럼명)
+두 날짜간의 차이를 달로 보여줌
+#ADD_MONTHS(컬럼명, 5)
+5달씩 추가해줌
+#NEXT_DAY(컬럼명, '금')
+해당달에 다음 금요일 날짜 찍어줌
+#LAST_DAY(컬럼명)
+
+컬럼명(에 숫자로 적혀있는 애들) => 숫자 OK
+				=> '문자열'도 OK
+오라클에서 알아서 되도록 만들었나봄
+
+함수1(함수2, 파라메터)
+이때의 함수2는 중첩함수라고 부름.
+
+
+
+# 형변환 함수
+암시적 형변환 auto
+수동적 형변환 수동
+
+데이터타입 : number char date 간에 변환을 공부함
+to_갈 데이터형(인자)
+
+TO_DATE(문자열, 'HH24:MI:SS CC YYYY/MM/DD') 형 가능
+TO_DATE( string1 [, format_mask] [, nls_language] )
+nls는 네셔널 랭기지 서포트인듯
+이렇듯 문자열-날짜 간에는 특이하게 변환이 가능하다.
+
+
+TO_CHAR(컬럼명, '형식')
+EX)
+SELECT ENAME, TO_CHAR(SAL*12*1198+NVL(COMM,0), 'L999,999,999) AS "연봉"
+
+
+# 막간 NVL
+NVL(인자, 변환할 문자)
+인자가 NULL이면 변환할 문자가 대신 들어감
+
+NVL(ENAME, 'ENAME') NVL(COMM,0) 이런식으로 문자열도 OK
+
+
+# 일반함수
+
+## [DECODE]랑 [CASE] 왠지 쓸 일이 많아보인다. 제대로 알아두자
+☆ DECODE
+SELECT ENAME, SAL
+DECODE(JOB, 'MANAGER', SAL*1.1,
+	     'CLERK', SAL*1.05,
+	              SAL*1.01) AS "UPSAL"
+이전의 작업에서는 DECODE로 사용했다고 하나 지금은 표준이 아니다.
+그래도 유지보수시에 쓰일 수 있으니 알아둘 것
+
+EX) 
+SELECT ENAME, 
+TO_CHAR(
+	DECODE(JOB, 'MANAGER', SAL*1198*12*1.1, 
+		      'CLERK', SAL*1198*12*1.5), 'L99,999,999') AS "1Y"
+EX)
+SELECT ENAME, 
+TO_CHAR(DECODE(JOB, 'MANAGER', SAL*1.1, 
+		      'CLERK', SAL*1.05, 
+			       SAL*1.01)) AS "UPSAL"
+FROM EMP
+
+해당 폼이 좋을듯 ("SAL*12*1198+NVL(COMM,0), 'L999,999,999')
+
+☆ CASE
+
+EX)
+SELECT ENAME, JOB, SAL, CASE
+				WHEN JOB = 'MANAGER' THEN SAL*1.1
+				WHEN JOB = 'CLERK' THEN SAL*1.05
+ELSE 
+	SAL*1.1
+END "UPSAL1"
+FROM EMP
+
+
+EX)
+DECODE(JOB, 'MANAGER, SAL*1.1,
+  	    'CLERK', SAL*1.05,
+		     SAL*1.1) AS "UPSAL2"
+
+
+위의 DECODE와 같은 기능을 하여 같은 UPSAL이 출력될 것이다.
+CASE는 ANSI표준이고 DECODE는 아니다.
+CASE를 애용하되 DECODE는 잊지 말고 유지보수시 사용하도록 하자.
+
+
+
+## 이거 중요하다고 한다.
+## JOIN
+
+%%% 
+그냥 내 생각
+JOIN은 두개 이상의 테이블을 연결하는 것을 말한다. 
+올바른 연결을 위해 조건이 생긴다.
+
+그냥 하면은 왜 안되나? -> (기준이 되는 열을 생각해보자, EQUI든 NONEQUI든) 
+조건 없이 JOIN하면 테이블이 합쳐지는데 이때의 생성되는 테이블은
+카티전(카디지언) 프로덕트 되기 때문에 (기반되어있는 성질임) 내가 원하지 않는 많은 행들이 검색된다.
+
+여기서 의미되는 카티전 프로덕트는 조합에 있는 곱집합 그것이다.
+기본적으로 SQL은 테이블끼리 합치면 이러한 성질을 지니고 있음을 잊지말자.
+%%%
+
+1. EQUI-JOIN (WHERE = )모양
+# 내 생각 : 조인시 특정 컬럼을 기준으로 합치는 1:1로 연결되는 JOIN방식이다.
+
+일반적인 조인(이라고 불리우는듯)
+조인 조건절인
+WHERE = 
+뒤에 추가 조건이 붙는 모양새이다.
+
+EX)
+SELECT ENAME, DNAME, EMP DEPTNO
+FROM EMP, DEPT
+WHERE EMP. DEPTNO = DEPT.DEPTNO 
+
+SELECT ENAME, DNAME, EMP.DEPTNO
+FROM EMP, DEPT
+WHERE EMP.DEPTNO = DEPT.DEPTNO
+AND SAL >= 3000
+
+2. NONEQUI-JOIN
+SELECT ENAME, GRADE
+FROM EMP, SALGRADE
+WHERE SAL BETWEEN LOSAL AND HISAL
+
+(동일한 값을 갖는 컬럼끼리 조합되는 것이 아님.
+문제가 생길 수도 있을거 같은데... )
+
+당연히 테이블이 N개가 합쳐지려면 최소한 N-1개의 조인 조건이 있어야함
+(A, B, C의 경우 삼단논법으로 생각해보자)
+
+EX) 3개의 테이블 조인 예
+SELECT E.ENAME, D.DNAME, S.GRADE
+FROM EMP E , DEPT D, SALGRADE S
+WHERE E.DEPTNO = D.DEPTNO
+AND
+E.SAL BETWEEN S.LOSAL AND S.HISAL
+
+3. SELF-JOIN
+
+이때까지 배운 WHERE절에서는 각 ROW마다 비교해서 다른 줄에서는 비교할 수가 없었다.
+
+처음에 생각되는 원시적인 방법 따로 카피본을 만들어서 다른 열 끼리 비교한다. 
+어마어마한 자원 낭비! 이렇게 카피본을 만들어서 사용하면 비효율적이니까
+실제로 메모리에 할당되는 것이 아닌 자기 자신의 ALIAS를 만들어서 
+자기 자신과 비교할 수 있게 만든다.
+
+FROM EMP E, EMP C << 이렇게 자기 자신 하나를 다른 별칭들로 복제해서 비교하자.
+
+4. OUTER JOIN
+
+해당 인자의 value가 invalid한 (NULL같은..)경우 선택되지 않는 부분들이 발생하기 마련이다.
+이거를 따로 빼서 맨 아랫줄에 보여주는 방법이 있음.
+(invalid한 인자를 가지고 있는)컬럼명 뒤에 (+)를 붙여주자.
+
+EX)
+SELECT E.NAME, C.ENAME
+FROM EMP E, EMP C
+WHERE E.MGR = C.EMPNO(+);
+
+
+# 배경지식
+디폴트값은 시스템 자원 상태에 따라서 다름
+그냥 지 메모리 상태에 따라 최적화되서 정렬되는 것
+OS나 해당 프로그램에서 메모리 관리하여 할당하는 것이기에...
+
+JOIN 없었으면 RDBMS도 없었다.
+
+
+# 내림차순, 오름차순 정렬
+ORDER BY COLUM1 ASC, COLUM2 DESC 
+ORDER BY 3 DESC (3번째 열로 정렬)
+특징 : SELECT문의 가장 마지막 위치 절
+컬럼명, ALIAS, 순서가 인자로 사용 가능
+
+
+FROM DUAL
+(연산시이나 간단한 작업시 사용될 row 1개짜리 미리 예약된 테이블)
+
+
+요약(이거 보고 리마인드 할 것)
+#single row function
+싱글 
+문자대소 : UPPER, LOWER, INITCAP
+문자조작 : SUBSTR, LENGTH, INSTR, LPAD, RPAD, CONCAT
+숫자     : ROUND, TRUNC, MOD
+날짜     : SYSDATE, MONTHS_BETWEEN, ADD_MONTHS, 
+	   NEXT_DAY, LAST_DAY
+형변환   : TO_CHAR, TO_NUMBER, TO_DATE 
+일반     : NVL, DECODE (CASE) 
+#join
+equi, nonequi, self, outer

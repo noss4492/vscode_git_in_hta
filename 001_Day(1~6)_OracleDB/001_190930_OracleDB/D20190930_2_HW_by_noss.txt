@@ -1,0 +1,105 @@
+##2. 당일과제
+아래의 결과를 얻는 SQL문을 작성하시오.
+
+
+1. 사번, 이름, 급여  ? 
+SELECT EMPNO, ENAME, SAL
+FROM EMP;
+
+
+2. 부서번호, 부서명 출력 ? 
+SELECT DEPTNO, DNAME
+FROM EMP;
+
+
+3. 급여가 1000 이상인 사원들의 사번, 이름 ,급여  ? 
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL >= 1000;
+
+
+4. 부서번호가 10번이고 급여가 1500이상인 사원들의 이름, 급여, 부서번호? 
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10
+AND SAL >= 1500;
+
+
+5. 이름에 K가 들어있는 사원들의 사번, 이름, 급여 , 부서번호? 
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE ENAME LIKE '%K';
+
+6.JOB이 MANAGER 가 아닌 사원들의 이름, JOB? 
+SELECT ENAME
+FROM EMP
+WHERE JOB != 'MANAGER';
+
+
+7. 부서명이 SALES 인 부서의 부서번호, (사원)이름 , 위치? 
+
+# 테이블 조회
+select TABLE_NAME, COLUMN_NAME
+from ALL_TAB_COLUMNS
+where column_name='DNAME';
+
+# 조회된 내용, 해당 컬럼을 포함하는 테이블 이름이 DEPT임을 확인
+TABLE_NAME                     COLUMN_NAME
+------------------------------ ------------------------------
+KU$_DEPTYPES_VIEW              DNAME
+KU$_DEPVIEWS_VIEW              DNAME
+DEPT                           DNAME
+
+
+# 테이블을 합쳐서 조회해봐야 함, 애매하다는 에러가 있어서 DEPT컬럼의 주인 테이블을 명시하여 사용함
+SELECT EMP.DEPTNO, ENAME, LOC
+FROM EMP, DEPT
+where EMP.DEPTNO = DEPT.DEPTNO;
+
+    DEPTNO ENAME      LOC
+---------- ---------- -------------
+        20 SMITH      DALLAS
+        30 ALLEN      CHICAGO
+        30 WARD       CHICAGO
+        20 JONES      DALLAS
+        30 MARTIN     CHICAGO
+        30 BLAKE      CHICAGO
+        10 CLARK      NEW YORK
+        20 SCOTT      DALLAS
+        10 KING       NEW YORK
+        30 TURNER     CHICAGO
+        20 ADAMS      DALLAS
+
+    DEPTNO ENAME      LOC
+---------- ---------- -------------
+        30 JAMES      CHICAGO
+        20 FORD       DALLAS
+        10 MILLER     NEW YORK
+
+
+8. JOB이 CLERK 이거나  20번 부서에 속해 있는 사원들의 사번, 이름, 부서번호, JOB? 
+SELECT EMPNO, ENAME, DEPTNO, JOB
+FROM EMP
+WHERE JOB = CLERK
+OR DEPTNO = 20;
+
+
+9. 급여가 1500 이상 3000 사이에 있으면서  
+	JOB이 MANAGER 인 사원의 사번, 이름 , JOB ? 
+SELECT EMPNO, ENAME, JOB
+FROM EMP
+WHERE JOB = 'MANAGER'
+AND SAL BETWEEN 1500 AND 3000;
+
+
+10. 부서위치가 DALLAS인 부서의 부서번호, 부서명? 
+SELECT DEPTNO, DNAME
+FROM EMP
+WHERE LOC = 'DALLAS';
+
+
+11. COMM 을 받지 않는 사원(0도 포함)들의 사번, 이름, 급여, COMM ? 
+SELECT EMPNO, ENAME, SAL, COMM
+FROM EMP
+WHERE COMM = 0
+OR NVL(COMM, 0) = 0;

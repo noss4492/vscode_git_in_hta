@@ -1,0 +1,15 @@
+SQL> SPOOL
+currently spooling to -OFF.LST
+SQL> SPOOL SPOOL.TXT OFF
+SP2-0768: Illegal SPOOL command
+Usage: SPOOL { <file> | OFF | OUT }
+where <file> is file_name[.ext] [CRE[ATE]|REP[LACE]|APP[END]]
+SQL> SPOOL OF ./SPOOL.TXT
+SP2-0768: Illegal SPOOL command
+Usage: SPOOL { <file> | OFF | OUT }
+where <file> is file_name[.ext] [CRE[ATE]|REP[LACE]|APP[END]]
+SQL> SPOOL ./SPOOL.TXT OFF
+SP2-0768: Illegal SPOOL command
+Usage: SPOOL { <file> | OFF | OUT }
+where <file> is file_name[.ext] [CRE[ATE]|REP[LACE]|APP[END]]
+SQL> SPOOL OFF

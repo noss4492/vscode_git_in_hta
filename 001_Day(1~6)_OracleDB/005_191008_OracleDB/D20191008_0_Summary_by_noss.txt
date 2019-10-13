@@ -1,0 +1,385 @@
+
+## 19-10-08 그래서 정리함
+-------------------------------------------------------------------------------------------------
+# 일반적인 분류
+DML : SELECT, INSERT, UPDATE, DELETE
+혹은 DQL or QUERY : SELECT
+DCL : COMMIT, ROLLBACK, GRANT, REVOKE
+혹은 TCL : COMMIT, ROLLBACK
+
+# 수업에서의 정의(일단 이렇게 알고 있어야겠음)
+QUERY : SELECT
+DML : INSERT, UPDATE, DELETED
+TCL : COMMIT, ROLLBACK, SAVEPOINT
+DDL : CREATE, ALTER, DROP, RENAME, TRUNCATE, COMMENT
+
+-------------------------------------------------------------------------------------------------
+# TABLE의 종류는 두가지가 있음
+1. data dictionary (얘는 메타데이터를 담고 있는 테이블이다.)
+2. user-define
+data dictionary는 오라클 설치시 자동으로 만들어짐
+오라클이 유지 관리하기 위해 사용하고 있음
+
+
+// query : 질의어, 정보 수집에 대한 요청에 쓰이는 컴퓨터 언어임(ㅇㅎ)
+// 보통 DML할 일은 없음 (DDL도 마찬가지일거 같은데) 이런거 많은 회사는 탈주 ㄱ
+
+
+[팁] #
+SET SQLPROMPT "_USER>"
+_USER이 어떤 지정된 변수인가봄
+
+-------------------------------------------------------------------------------------------------
+# data dictionary 작명법
+접두사 + 관심키워드 + 복수형
+
+접두사
+USER_ : 유저가 만든거와 관련된 정보    
+ALL_ : 접근 권한이 있는 모든 것과 정보
+DBA_ : DBA만 접근해야되는 정보
+V$ : 동적, 성능과 관련된 정보
+-------------------------------------------------------------------------------------------------
+# OBJECT
+- table
+- index
+- view
+- senquence
+- synonym
+
+-------------------------------------------------------------------------------------------------
+# View
+
+-- View란? 물리적 테이블에 근거한 논리적 가상테이블의 역할
+-- 보안목적으로 사용됨(해당 유저는 특정 영역만 볼 수 있게? 만들어봐야 알듯)
+-- 조인 문장의 단순화
+-- 이외에 여러가지 목적으로 쓰임
+-- 많이 사용할 것을 권장함(성능의 향상을 위해)
+
+// 내 생각. 그냥 포인터써서 보는거랑 같음 간접참조 개념인듯
+(가상으로 만들어지는 테이블이라는 이름은 사실과 조금 다를지도 모르겠다고 생각함)
+이름 그대로 정말로 view만을 위해서 만들어진 개념으로 보인다.
+실제의 테이블을 비춰서 보여준다. 반사망원경 같다고 해야할까?
+
+# 뷰의 개념적 동작(실제로는 다를 수도 있음)
+SELECT *
+FROM EMPVW30	<<<<--조회해보니 얘가 뷰다 싶으면
+(EMPVW30) -> (SELECT EMPNO, ENAME, SAL, DEPTNO
+		FROM EMP
+		WHERE DEPTNO = 30)
+이렇게 내부 동작이 이루어짐(서브쿼리 처럼, 포인터 간접 참조 처럼)
+(뷰가 접근 주소 같은 역할인듯)
+
+ex) 조인 문장의 단순화
+CREATE VIEW EMP_DEPT
+AS
+SELECT E.ENAME, D.DNAME
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTN
+
+ex) 뷰에 update를 갈겨버리면 비추고 있는 테이블 해당 자리의 데이터가 추가/수정 됨
+UPDATE EMPVW30
+SET SAL = 1250
+WHERE ENAME = 'MARTIN'
+
+ex) 아 맞다 역으로 탐색해서 끄집어냄, 뷰에 담긴 텍스트 조회임, 
+USER_VIEWS에 TEXT 컬럼 말고 다른 애들도 많이 들어있음.(VIEW_NAME, TEXT)
+TEXT를 강조하시던데 뭔가 이유라도 있는걸까
+SELECT TEXT
+FROM USER_VIEWS
+WHERE VIEW_NAME='뷰이름'
+
+// dict가 데이터딕셔너리 테이블인거 같은데
+
+-------------------------------------------------------------------------------------------------
+## 권한 주기
+SHOW USER (현재누구)
+GRANT CREATE VIEW TO SCOTT; (뷰만드는권한 부여)
+//만들랬더니 일반 유저는 뷰 만들기 권한이 없었음
+
+
+-- VIEW의 수정
+
+-- CREATE TABLE 테이블명 .. ~~
+-- ALTER TABLE, ~~~
+
+-- CREATE VIEW 뷰명 ~~~
+-- ALTER xxxxx
+
+-- SELECT문의 변경 => 데이터딕셔너리
+
+
+CREATE OR REPLACE VIEW임. alter view 따위는 없다.
+
+-------------------------------------------------------------------------------------------------
+
+
+# 심플뷰
+AS 밑 서브쿼리 단순화
+# 컴플렉스뷰
+AS 밑에 JOIN, GROUP BY, HAVING이 오면
+
+// 왜 이렇게 나눠서 보는 것?
+// 왜? -> 흠.. 그냥 경우들을 묶어서 분류한 것 일 뿐인 듯
+
+SIMPLE VIEW   |  COMPLEX VIEW
+DML(O)        |  DML(될수도 안될수도)
+업데이트 아까 해봤는데 됐음 ㅇㅋ, 컴플렉스뷰는 보장못함
+// 컴플렉스뷰인경우 보장 못하는 이유는 뭐 multiple row function으로 묶어버리면 컬럼이 묶여버리고 join해버리면 키가 뒤섞이고 등등... 여러가지 이유에 의해 프로그램이 판단할 경우의 수가 많아져버리기 떄문인듯함. 그냥 케바케라서 시스템 프로그래머가 못 만들었다는 소리임.
+
+# join해버렸을 때 뷰에 dml(insert, update, delete) 대부분 안됨
+CREATE VEIW EMP_DEPT
+AS
+SELECT E.ENAME, D.NAME
+FROM EMP E INNER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO;
+
+# group도 마찬가지로 대부분 안됨
+CREATE VIEW AVG_DEPTNO
+AS
+SELECT DEPTNO, AVG(SAL) AVGSAL
+FROM EMP
+GROUP BY DEPTNO;
+
+
+-------------------------------------------------------------------------------------------------
+DB의 제약조건에 대해서 말하려고 하시는듯
+DB
+- 무결성
+- 동시성
+
+// 데이터 트랜잭션 특성을 설명하려고 하시는듯 (이건 그냥 내 주석이다.)
+// 데이터 베이스는 acid규칙을 만족하게 설계되었다.
+// 원자성atomicity    : 하나 되면 다 되야지
+// 일관성consistency : DB 무결성 조건을 만족해야함
+// 고립성isolation     : 트랜잭션이 실행되는 동안 다른 트랜잭션이 그 트랜잭션에는 접근할 수 없다.
+// 지속성durability    : 트랜잭션이 끝난 뒤에는 그 결과가 데이터베이스에 유지되어야함
+
+//원자성 => 회복
+//일관성 => 동시성 제어 => 무결성 제약조건
+//고립성 => 동시성 제어
+//지속성 => 회복
+
+이 규칙을 지키면서 병행제어 하고 있다.
+
+
+읽기 일관성
+- A에서 커밋되기 전의 결과가 B에는 반영되지 않음. B는 A에서 변경한걸 볼 수가 없지
+
+DML시 원본값들은 롤백 세그먼트(OR UNOB 세그먼트)에 저장됨
+(트랜잭션, SAVEPOINT 같이)
+
+-- 
+LOCK은 트랜잭션간 상호 파괴적인 행위를 막기위한 오라클의 보호관리 메카니즘이래
+흠 설명이 좀 ?
+- 최소단위 지정 -> DML로 발생되는 락은 최소 단위가 ROW단위
+- 자동으로 지정됨
+-
+
+
+-실습 상황1 (블로킹)
+1. A에서 SCOTT의 월급을 200으로 설정
+2. B에서 SCOTT의 월급을 100으로 설정
+3. 이러면 락 상태로 A에서 결정을 내리기 전까지는 B에서는 대기
+(한 쓰레드(?)가 자원을 독점하여 사용하기 떄문 , 일관성을 유지하기 위해서)
+4. A에서 결정을 내리면 락이 풀리고 B에서도 업데이트가 된다.
+
+Why? -> A에서 롤백 세그먼트 메모리 공간을 독점하고 있으므로 B는 대기 
+
+
+//롤백 세그먼트
+트랜잭션 진행시 그 이전 이미지를 기록하기 위해 사용되는 CIRCULAR구조의 세그먼트
+프로세스가 데이터베이스의 데이터에 변경 할 때 이전 값을 저장하는데 사용된다고 함.
+(레지스터에서 뭔가 담아뒀다가 꺼내 쓰는데 이거랑 비슷한 느낌인듯)
+
+
+-실습 상황2 (row단위로 이루어짐)
+1. A에서 SCOTT의 월급을 100으로
+2. B에서 SMITH의 200으로 -> 다른 ROW면 락에 안 걸린다는 얘기를 하기 위해서
+3. B에서 SCOTT의 200으로 -> 같은 ROW면 락에 걸린다는 걸 보여줌 
+
+-실습 상황3 교착상태(DEADLOCK) 만들기 
+1. A 스콧 월급 UPDATE
+2. B 스밋 월급 UPDATE
+3. A 스밋 월급 UPDATE - 락(B가 끝날때 까지 기다려야함)
+4. B 스콧 월급 UPDATE - 락(A가 끝낼때 까지 기다려야함)
+둘이서는 해결이 안됨
+
+
+## 이 때의 오라클 동작
+A의 마지막 명령 1개는 취소됨
+//(B에서 데드락이 걸리는 행위를 하면 이를 프로그램이 판단하여
+(에러나면 패킷 날려주는거 처럼) A의 마지막 명령을 취소시킨다고함)
+
+
+
+Dead Lock 해결방법
+- 시간마다 나눠서             ( TDM )
+- 업무를 한쪽에 이관해버림 (한 쪽(프로세스)에 몰빵)
+
+
+
+# constraint(제약조건)에 관한 설명
+EMP                                                 DEPT
+EMPNO    ENAME    SAL      DEPTNO  |   DEPTNO    DNAME    LOC
+중복(X)  중복(O)                             :=            
+NULL(X)  NULL(x)                           
+primary    not      check         foreign key primary    unique
+key         null                           참조
+
+
+DEPTNO 중복 X, NULL X
+DEPTNO(1,2,3,4) = DEPTNO(1,2,3,4)  <<5번 부서따위 있어선 안됨
+DNAME 중복X, UNIQUE
+
+
+
+무결성을 지키기위해
+DML 할 때마다 제약조건을 만족하는지 검사하고
+만족하면 실행, 아니면 실행안함
+
+
+제약조건
+1. 테이블 정의 시에
+	1-1. 컬럼레벨 정의 방식
+	  컬럼명 DATATYPE [CONSTRAINT 제약명] 제약종류
+		[]로 제약에 이름을 줄 수 있음
+		제약명을 생략했다면 제약에 이름이 없는 것이 아니라
+		오라클이 제약명을 SYS_C숫자 형식으로 임의 부여
+	1-2. 테이블 레벨 정의 방식
+ 		컬럼명 DATATYPE,
+		컬럼명 DATATYPE,
+		CONSTRAINT 제약명 제약종류(컬럼명),
+		CONSTRAINT 제약명 제약종류(컬럼명),
+
+
+ex) a. 테이블 생성시에 제약조건을 거는 방법. 
+(2가지 방법. 1_ 한열에 전부 명시, 2_ 데이터형 정의 후 마지막에 명시(이는 복수컬럼 묶어 사용 가능)
+CREATE TABLE EMP1
+	(EMPNO NUMBER(4) CONSTRAINT EMP1_EMPNO_PK PRIMARY KEY,
+	ENAME VARCHAR2(20) NOT NULL,
+	SAL NUMBER(7,2),
+	DEPTNO NUMBER(2),
+	CONSTRAINT EMP1_SAL_CK CHECK(SAL BETWEEN 500 AND 5000),
+	CONSTRAINT EMP1_DEPTNO_FK FOREIGN KEY(DEPTNO)
+	REFERENCES DEPT1(DEPTNO));
+
+
+
+## 내가 생성한 제약조건에 대한 정보 확인
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME, SEARCH_CONDITION
+FROM USER_CONSTRAINTS					<<-메타데이터(이 프로그램이 유지관리하기 위해서는 이 테이블의 컬럼을 참조하여 마구마구 사용하겠지)
+WHERE TABLE_NAME IN ('EMP1', 'DEPT1')
+
+
+
+
+
+CONSTRAINT_NAME                     C TABLE_   SEARCH_CONDITION (CHECK경우 제약조건은)
+----------------------------------------   - ------   --------------------
+SYS_C0011053(임의로 생성된 애들)  P DEPT1
+SYS_C0011055                            C EMP1     "ENAME" IS NOT NULL
+EMP1_SAL_CK                            C EMP1     SAL BETWEEN 500 AND 5000
+EMP1_EMPNO_PK                       P EMP1
+EMP1_DEPTNO_FK                      R EMP1     FOREIGN KEY
+6 rows selected.
+
+
+만드는 사람들이 이렇게 만들어 놓았다. 5개로 제약조건(pk, fk, u, r, check)로 각각 구별하고 
+NOT NULL은 CHECK의 조건에 들어있는 특수한 경우로 만들어 두었다.
+
+
+
+
+
+b. 테이블 생성 후에 추가하는 방법
+
+ALTER TABLE 테이블명
+ADD 테이블레벨정의방식(ex. 컬럼명 
+
+ALTER TABLE DEPT1
+ADD CONSTRAINT DEPT1_LOC_UK(라는제약) UNIQUE(라는 제약조건) (LOC);
+
+LOC 같은 거 인서트하면 에러남
+(제약이 유니크로 바꼇으니까)
+
+ALTER TABLE DEPT1
+DROP CONSTRAINT DEPT1_LOC_UK;
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+[팁] # 여기다가도 FROM 쓸 수 있다
+DELETE [FROM] DEPT1
+WHERE DEPTNO = 1;
+
+
+----------------------------------------------------------------------------------------------------
+# 포린키 실습. 줄여서 정리가 안된다. 일단 부모-자식 관계를 실습함.
+자식은 부모를 레퍼런스하고 있으므로 부모의 컬럼에 속한 데이터를 따라야하며
+부모는 자식을 남기고 삭제될 수 없음.
+
+1,2번 부서 있다고 가정시
+INSERT INTO EMP1 VALUES (2222, 'KILL', 3000, 999);
+999번 부서는 없으니까
+
+ORA-02291: integrity constraint (SCOTT.EMP1_DEPTNO_FK) violated - parent key
+not found
+부모? 이 에러는 레퍼런스하는 테이블에 없는 값이 있나봄
+
+DEPT.DEPTNO 레퍼런스 되는 애 (parent, master)
+EMP.DEPTNO 참조하는 애 (child, slave) 
+
+
+
+## 참조하는애 있으면 부모는 못 없앰
+SQL> SELECT * FROM EMP1;
+
+     EMPNO ENAME                       SAL     DEPTNO
+---------- -------------------- ---------- ----------
+       111 HONG                       3000          1
+
+SQL> SELECT * FROM DEPT1;
+
+    DEPTNO DNAME                LOC
+---------- -------------------- --------------------
+         1 A                    B
+         2 AA                   BB
+
+SQL> DELETE FROM DEPT1
+  2  WHERE DEPTNO = 1;
+DELETE FROM DEPT1
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (SCOTT.EMP1_DEPTNO_FK) violated - child record
+found
+
+
+DROP TABLE EMP1 PURGE
+#흘려넘기셈
+레퍼런시스 딜릿 온 캐스케이드 옵션이 있음 함부로 만들지 마셈
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+[팁] #
+이미 (추가하고자하는)제약을 위배중일시 그 제약을 추가할 수 없음
+
+
+
+----------------------------------------------------------------------------------------------------
+NOT NULL
+UNIQUE 
+
+1. NULL 추가 할 수 있을까? ㅇㅋ 당근 여러개도 당근 ㅇㅋ 
+NULL을 중복체크할 생각은 못했네 당근 NULL은 할당, 비교, 연산이 안되므로 안됨
+
+
+
+
+
+
+

@@ -1,0 +1,601 @@
+19-10-02
+
+# 그냥 적어놓는 거 (나중에 지워)
+select TABLE_NAME, COLUMN_NAME
+from ALL_TAB_COLUMNS
+where column_name='DNAME';
+테이블 컬럼 찾기가 가능
+
+
+## 10-01 숙제2-1 10번 다른 방법의 풀이
+
+곱집합으로 생성되는 모든 열(14*14)을 출력하고
+한쪽을 'BLAKE'로 고정 시키면 14개의 행이 있을 테니까
+
+SELECT E.ENAME, E.HIREDATE, C.HIREDATE, C.ENAME
+FROM EMP E, EMP C
+
+...
+MARTIN     81/09/28 81/12/03 FORD
+MARTIN     81/09/28 82/01/23 MILLER
+BLAKE      81/05/01 80/12/17 SMITH
+BLAKE      81/05/01 81/02/20 ALLEN
+BLAKE      81/05/01 81/02/22 WARD
+BLAKE      81/05/01 81/04/02 JONES
+BLAKE      81/05/01 81/09/28 MARTIN
+BLAKE      81/05/01 81/05/01 BLAKE
+BLAKE      81/05/01 81/06/09 CLARK
+BLAKE      81/05/01 87/04/19 SCOTT
+BLAKE      81/05/01 81/11/17 KING
+BLAKE      81/05/01 81/09/08 TURNER
+BLAKE      81/05/01 87/05/23 ADAMS
+BLAKE      81/05/01 81/12/03 JAMES
+BLAKE      81/05/01 81/12/03 FORD
+BLAKE      81/05/01 82/01/23 MILLER
+...
+
+196행 = 14^2이 출력됨. 원본 1행마다 14행씩 출력되니까 한 행을 고정시키면 14행
+
+
+  1  SELECT E.ENAME, E.HIREDATE, C.HIREDATE, C.ENAME
+  2  FROM EMP E, EMP C
+  3* WHERE E.ENAME='BLAKE'
+
+ENAME      HIREDATE HIREDATE ENAME
+---------- -------- -------- ----------
+BLAKE      81/05/01 80/12/17 SMITH
+BLAKE      81/05/01 81/02/20 ALLEN
+BLAKE      81/05/01 81/02/22 WARD
+BLAKE      81/05/01 81/04/02 JONES
+BLAKE      81/05/01 81/09/28 MARTIN
+BLAKE      81/05/01 81/05/01 BLAKE
+BLAKE      81/05/01 81/06/09 CLARK
+BLAKE      81/05/01 87/04/19 SCOTT
+BLAKE      81/05/01 81/11/17 KING
+BLAKE      81/05/01 81/09/08 TURNER
+BLAKE      81/05/01 87/05/23 ADAMS
+BLAKE      81/05/01 81/12/03 JAMES
+BLAKE      81/05/01 81/12/03 FORD
+BLAKE      81/05/01 82/01/23 MILLER
+
+
+  1  SELECT E.ENAME, E.HIREDATE, C.HIREDATE, C.ENAME
+  2  FROM EMP E, EMP C
+  3  WHERE E.ENAME='BLAKE'
+  4* AND E.HIREDATE < C.HIREDATE
+
+ENAME      HIREDATE HIREDATE ENAME
+---------- -------- -------- ----------
+BLAKE      81/05/01 81/09/28 MARTIN
+BLAKE      81/05/01 81/06/09 CLARK
+BLAKE      81/05/01 87/04/19 SCOTT
+BLAKE      81/05/01 81/11/17 KING
+BLAKE      81/05/01 81/09/08 TURNER
+BLAKE      81/05/01 87/05/23 ADAMS
+BLAKE      81/05/01 81/12/03 JAMES
+BLAKE      81/05/01 81/12/03 FORD
+BLAKE      81/05/01 82/01/23 MILLER
+
+--------------------------------------------------------------
+
+# 생각1
+
+SELECT C.ENAME, C.HIREDATE
+FROM EMP E, EMP C
+WHERE C.HIREDATE > 
+	(SELECT SUBSTR(E.HIREDATE, 0)
+	FROM DUAL
+	WHERE E.ENAME LIKE 'BLAKE');
+
+SW에서 자동으로 동작 수행과정 설정
+SELECT절 스칼라 서브쿼리 나중에 배운다함
+
+
+# 생각 2
+
+다른 경우에도 이렇게 곱집합의 특성을 이용하여 
+원본 1행을 고정시켜 사용하는 방법을 자주 쓸 듯 하다.
+
+
+--------------------------------------------------------------
+
+
+
+
+
+
+
+19-10-02 숙제 1번(일까?)
+
+SELECT EMPNO, ENAME, CASE 
+	WHEN ENAME LIKE 'KING' THEN NVL(TO_CHAR(MGR), 'CEO')
+	ELSE EMP.JOB
+END AS "MGR"
+FROM EMP
+/
+
+
+# 지나가는 생각
+SET NULL ""  <<- 셋 명령 위험스
+
+
+
+-----------------------------------------------------
+
+19-10-02
+# 진짜 오늘 메모 시작임
+
+
+SQL92 표준 <-> SQL 99표준
+DECODE <-> CASE
+JOIN <-> (명시) JOIN
+
+1. 그냥 JOIN하면 뭔가 맘에 안드니까 이젠 명시해줌
+
+2. CROSS JOIN (곱집합으로 생성되는 조인)
+NATURAL JOIN (1대1 연결되는 EQUI JOIN)
+-> 오 WHERE 컬럼1=컬럼2 안해도 되네
+-> 그래도 유지보수 측면에 둘 다 해야됨
+-> 기준이 되는 컬럼이 없으면 안됨
+※주의 : NATURAL JOIN에서는 SELECT시 E.DEPTNO처럼 어디 거라고 특정지으면 안됨
+	 DEPTNO라는 새로운 컬럼이 생성된 것이기 때문임.
+
+
+기준이 되는 컬럼(같은 이름을 가지는 컬럼)
+이게 두개 이상이면 아래 방법으로 기준열을 정할 수 있음
+3.
+SELECT E.ENAME, D.DNAME
+FROM EMP E JOIN DEPT D
+USING (DEPTNO);
+// 이 컬럼을 사용해서 조인해달라는 얘기임
+// 이게 기본으로 INNER JOIN임
+
+
+기준이 되는 컬럼(같은 이름을 가지는 컬럼)
+이 없다면 아래 방법으로 조인 가능함
+4. 
+SELECT E.ENAME, D.DNAME
+FROM EMP E JOIN DEPT D
+ON (E.DEPNDFNDNF = D.DEPTNO)
+-> 이거 신기하네 비슷한 자료 들어있는 거 판별해서 자동으로 연결해주는 듯
+
+5. 
+OUTER JOIN
+
+SQL 99 표준 <<- 요러케 씀
+ SELECT E.ENAME, C.ENAME
+ FROM EMP E LEFT OUTER JOIN EMP C
+ ON (E.MGR = C.EMPNO)
+
+SQL 92 표준
+ SELECT E.ENAME, C.ENAME
+ FROM EMP E, EMP C
+ WHERE E.MGR = C.EMPNO(+)
+
+LEFT, RIGHT, FULL
+-> 은근히 많이 씀
+
+
+# SQL 99 표준 JOIN
+CROSS JOIN
+NATURAL JOIN
+JOIN ~~~~~ USING
+JOIN ~~~~~ ON
+
+어제 숙제 99표준으로 ㄱㄱ
+
+막간에 테이블 수정 명령
+ ALTER TABLE EMP
+ RENAME COLUMN DNO TO DEPTNO;
+
+
+COL "컬럼명" FORMAT A10 << 이런것도 있음
+
+-----------------------------------------------------
+
+SINGLE ROW FUNCTION  - 한 번에 한 줄씩 탐색
+MULTIPLE ROW FUNCTION - 다중 입력 단일 출력 * <- 오늘 이거 함
+
+# NULL은 제외하게 만들어져있음
+
+EX)
+숫자타입만 
+SELECT COUNT(SAL), COUNT(*), MIN(SAL), MAX(SAL), SUM(SAL), AVG(SAL) 분산, 표준편차 등등
+문자나 날짜 가능 
+SELECT MIN(ENAME), MAX(HIREDATE)
+
+
+# GROUP BY 절
+SELECT AVG(SAL)
+FROM EMP
+GROUP BY DEPTNO
+
+단일출력 되는데 이걸 다 그룹마다 다 할 수는 없으니
+GROUP BY 컬럼명 으로 내부에 컬럼명 기준으로 그룹으로 묶인다.
+
+# MULTIPLE ROW FUNCTION = GROUP FUNCTION
+그룹당 한번 출력결과를 돌려준대서 그렇게 이름 붙여졌다함
+
+
+SELECT AVG(SAL), DEPTNO
+FROM EMP
+GROUP BY DEPTNO
+
+일반적으로 GROUP BY 컬럼명 <- 이 컬럼이 SELECT 됨 (다른 컬럼들은 올 수 없음)
+# 생각 . 공통점있어 묶일 수 있는 컬럼이 기준이 되어 인덱스가 될 수 있음
+
+
+GROUP BY 컬럼
+HAVING 그룹펑션 조건
+
+HAVING 조건 - GROUP에 대한 제한
+WHERE 조건 - ROW에 대한 제한
+
+
+-----------------------------------------------------
+
+[팁] : sql 명령 (해당 컬럼명의 출력열 길이를 설정해줌)
+col "SERV_YY/MM" format a10
+
+
+
+
+## 전체 복습 했는데 몰랐던 것
+
+ORDER BY 컬럼(ALIAS, 순번) ASC/DESC의 디폴트는 DESC이다.
+GROUP BY 컬럼, 컬럼 요래 쓸 수 있음
+
+
+-------------------------------------------------------
+-------------------------------------------------------
+
+
+## 오 이중으로도 사용 가능함
+## 이게 서브쿼리라고 함
+
+SELECT ENAME, SAL
+FROM EMP
+WHERE SAL >= ()
+이거를 연상해보면
+
+SELECT ENAME, SAL
+FROM EMP
+WHERE SAL >= (SELECT SAL
+		FROM EMP
+		WHERE ENAME = 'JONES')
+이런식으로 사용 가능하다는 것을 알 수 있음
+
+
+
+
+MAIN QUERY 보다 SUBQUERY가 먼저 동작됨
+QUERY = '질의'
+
+
+
+## 2일차 10번 문제의 경우 예
+# SubQuery로 풀면
+SELECT ENAME, HIREDATE
+FROM EMP
+WHERE HIREDATE > (SELECT HIREDATE
+           	  FROM EMP
+           	  WHERE ENAME = 'BLAKE')
+# Join으로 풀면
+SELECT C.ENAME, C.HIREDATE
+FROM EMP E JOIN EMP C
+ON (C.HIREDATE >= E.HIREDATE)
+WHERE C.ENAME LIKE 'BLAKE'
+
+그래도 동작 속도는 비슷하니 (프로그램에서 관리해줌)
+맘대로 사용할 것
+
+서브 쿼리문(먼저 연산시 필요해지는 애)를 먼저 적어두고
+메인 쿼리문을 작성한 뒤 
+합쳐서 사용하면 된다.
+서브쿼리문에 대한 것은 대충 원노트에 적어두었음. 3 메모 확인해볼것
+
+
+
+반환되는 값이 한개면 a. , 여러개면 b.
+c. 서브쿼리 내부의 Select절에 컬럼이 두개 이상일 수도 있음
+
+a. single row subquery
+b. multiple row subquery
+c. multiple column subquery
+
+
+# 서브쿼리 조건
+1. 서브쿼리는 ()로 닫혀있어야함
+2. 싱글로우_서브쿼리 앞에는 싱글로우 오퍼레이터가 와야함  EX)  >= 39   >=(SRS)
+Single Row Subquery => Single Row Operater
+3. 멀티플로우_서브쿼리 앞에는 멀티로우 오퍼레이터가 와야함 EX) IN(1,2,3)    
+4. 서브쿼리 안에서는 ORDER BY 절 -> 의미가 없음
+따라서 지원하지 않음
+(단 Oracle 8i 버전부터 from절에 사용하는 서브쿼리의 경우 ORDER BY 지원함)
+
+
+1.()
+2.SRS=>SRO
+3.MRS=MRO
+4. 의미없음류 + 특별한 애 있음
+
+
+
+서브쿼리 내부의 Select절에 컬럼이 두개 이상일 수도 있음
+
+
+
+
+
+-------------------------------------------------------
+-------------------------------------------------------
+
+
+
+문제 풀면서 학습
+
+1.
+SMITH보다 월급을 많이 받는 사원들의 이름과 월급을 출력
+
+# 내 풀이
+ 서브쿼리를 먼저 작성
+  SMITH의 월급
+ 메인쿼리 작성 
+  머시기$ 보다 많이 받는 사원들
+ 합쳐서
+ 완성
+
+SELECT E.ENAME, E.SAL
+FROM EMP E
+WHERE SAL >= (SELECT E.SAL
+		FROM EMP
+		WHERE E.ENAME LIKE 'SMITH')
+
+
+2. 10번 부서의 사원들과 같은 월급을 받는 사원들의 
+이름과 월급과 부서번호를 출력
+
+SUB먼저 10번부서의 사원들
+
+SELECT ENAME
+FROM EMP
+WHERE DEPTNO = 10
+
+과 같은 월급을 받는
+
+SELECT ENAME
+FROM EMP E OUTER JOIN EMP C
+ON(E.SAL = C
+WHERE DEPTNO = 10
+
+
+SELEC
+SAL OUTER JOIN 
+
+
+메인쿼리 같은 월급 받는 사원들
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL = (SELECT ENAME
+	     FROM EMP
+ 	     WHERE DEPTNO = 10)
+
+
+# 생각. 이거 3단 서브쿼리문 아닌가?
+# 생각보다 어려운걸.. 못 풀겠음
+# 나도 저렇게 예를 넣어서 단계별로 ㅇ풀어보자
+
+
+
+
+급여 예 1000, 2000, 3000
+
+
+SELECT SAL
+FROM EMP
+WHERE DEPTNO = 10
+
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL IN (1000, 2000, 3000);
+
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL IN (
+           SELECT SAL
+           FROM EMP
+           WHERE DEPTNO = 10)
+
+내가 하던 짓
+# 틀린것
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL IN (SELECT ENAME
+	     FROM EMP
+ 	     WHERE DEPTNO = 10)
+/
+
+
+
+3. BLAKE와 같은 부서에 있는 사람들의
+이름과 입사일을 출력(블레이크 제외)
+
+서브 : BLAKE가 어디 부서에 있나?
+메인 : 같은 부서 사람들
+
+1서브부터 작성 (오타나있음)
+WHERE DEPTNO
+FROM EMP
+WHERE ENAME LIKE 'BLAKE'
+
+2메인 작성 (오타나있음)
+WHERE ENAME
+FROM EMP
+WHERE DEPTNO IN (부서명)
+
+3합체
+SELECT ENAME, HIREDATE
+FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO
+		FROM EMP
+		WHERE ENAME LIKE 'BLAKE')
+/
+
+# 먼놈의 셀렉을 웨어로 적고 있음, 피곤한가봄ㅇ
+# 일단 익숙해질때까지 예시로 든 인자를 넣어서 미리 작성해보자
+
+
+
+
+SELECT AVG(SAL)
+FROM EMP
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL > (평균급여)
+ORDER BY SAL DESC
+
+
+
+
+--9. KING에게 보고하는 모든 사원의
+ 이름과 급여를 출력(직속상사가 KING인)
+
+--직속상사가 킹 인 것을 서브쿼리로 만들어야하는데
+--문자열 킹을 단서로 숫자와 일치시켜야함
+--흠...
+
+
+-- 킹인 사람의 넘버가 인자로 사용될 것임 . 서브쿼리로 작성
+
+
+-- 메인쿼리 보고하는 사원들
+
+SELECT ENAME
+FROM EMP
+WHERE MGR = ();
+
+
+
+
+
+SELECT ENAME, SAL
+FROM EMP
+WHERE MGR = (SELECT EMPNO
+	     FROM EMP
+	     WHERE ENAME = 'KING'
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. 자신의 급여가 사원평균급여보다 많으면서, 이름의 'S'자가 들어가는 사원과 동일 부서인 
+모든 사원의 사원번호, 이름 및 급여를 출력
+
+
+조건1. 자신의 급여가 평균 급여보다 많아야함
+조건2. 이름에 S자가 들어가는 사람과 동일부서
+조건3. 단 1, 2 조건을 모두 만족하는 사원의 사번, 이름, 급여
+
+
+#서브쿼리1
+사원평균급여
+#서브쿼리2
+이름에 S 들어가는 사원
+
+#메인쿼리1
+1+2 인 사원들의 머시기를 출력
+
+
+#1
+SELECT AVG(SAL)
+FROM EMP
+
+#2 (멀티 인풋)
+SELECT DEPTNO
+FROM EMP
+WHERE ENAME LIKE '%S'
+
+#
+
+# SAL > (SELECT AVG(SAL)
+	  FROM EMP)
+AND
+# 
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO
+		 FROM EMP
+		 WHERE ENAME LIKE '%S')
+AND
+SAL > (SELECT AVG(SAL)
+       FROM EMP)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

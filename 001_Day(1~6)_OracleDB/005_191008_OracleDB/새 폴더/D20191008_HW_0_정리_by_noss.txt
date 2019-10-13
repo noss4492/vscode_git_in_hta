@@ -1,0 +1,745 @@
+
+## 191008 메모
+
+
+# 주석 
+ DML   : (SELECT 얘가 들어가나? ), INSERT, UPDATE, DELETE (15% ?)
+ 일부에서는 SELECT는 따로 빼서 DQL or QUERY라고 표현하기로 함.
+ DCL   : COMMIT, ROLLBACK, GRANT, REVOKE
+ 일부에서는 COMMIT, ROLLBACK를 따로 빼서 TCL이라고 표현하기도 함.
+
+
+# 수업에서
+ Query : SELECT						()
+ DML : Insert, update, delete				()
+ TCL : commit, rollback, savepoint			()
+ DDL : create, alter, drop, rename, truncate, comment   (별로 쓸 일 없을듯)
+
+# table
+1. data dictionary ( = metadata) -> 유지관리에 사용되는 애 ㅇㅋ
+2. user-define
+
+
+# 잠깐 적어둠
+나 SCOTT/SYSTEM/SYS 다 ORACLE(대문자)로 비번 해둠
+SET SQLPROMPT "_USER>"   "안에 변수 쓰면 되네"
+
+데이터 딕셔너리 (작명)
+- 접두사 + 관심키워드 + 복수형
+접두사
+USER_: 내가 생성한 것과 관련된 정보            # 내가 만든거
+ALL_ : 접근 권한이 있는 모든 것과 정보         # 내가 볼 수 있는거 다
+DBA_ : DBA만 접근하여야하는 모든 것과 정보     # DBA 열람
+V$   : 동적, 성능과 관련된 정보                # 현재 바뀌고 있는 것들 (MEM, USER입출)
+
+ex) USER_TABLES
+
+
+데이터 딕셔너리는 메타데이터로써
+오라클 설치시 자동으로 만들어짐( ㅇㅋ )
+오라클이 유지, 관리
+QUERY : 정보
+DML 할일 없음
+나중에 더 볼 것이라고함
+# 걍 유지관리용 메타데이터라는 소리임
+
+# COMMENT는 달았는데 어떻게 확인하나
+DESC USER_TAB_COMMENTS로 코맨트가 어디 있는지는 알았는데
+그래서 어떻게 봄?
+
+
+
+# OBJECT
+Table
+View
+Sequence
+Index
+Sy?
+
+## View 라는 걸 배우는듯 ( 이거 대체 왜 만듬? )
+
+-- 결론 : 뷰란? 물리적 테이블에 근거한 논리적 가상테이블의 역할
+-- 보안(해당 유저는 어디만 볼 수 있게 됨), 
+-- 조인 문장의 단순화
+-- 많이 사용할 것을 권장함
+
+# 첨 생각. 
+가상으로 만들어지는 테이블
+(정말로 VIEW만을 위해서 만들어지는 애인듯)
+(실제의 테이블을 보여주는 애인듯, 틈새로 보이는 창문같은애)
+
+
+-- 조인 문장의 단순화 --
+SCOTT>CREATE VIEW EMP_DEPT
+  2  AS
+  3  SELECT E.ENAME, D.DNAME
+  4  FROM EMP E, DEPT D
+  5  WHERE E.DEPTNO = D.DEPTN
+
+View created.
+
+SCOTT>SELECT * FROM EMP_DEPT;
+
+ENAME      DNAME
+---------- --------------
+SMITH      RESEARCH
+ALLEN      SALES
+WARD       SALES
+JONES      RESEARCH
+MARTIN     SALES
+BLAKE      SALES
+CLARK      ACCOUNTING
+SCOTT      RESEARCH
+KING       ACCOUNTING
+TURNER     SALES
+ADAMS      RESEARCH
+
+ENAME      DNAME
+---------- --------------
+JAMES      SALES
+FORD       RESEARCH
+MILLER     ACCOUNTING
+
+14 rows selected.
+------------------------------
+
+
+
+
+추가, 수정 되네? (대신 뷰가 아니라 원래 있는 자리로 가서 추가, 수정함)
+UPDATE EMPVW30
+SET SAL = 1250
+WHERE ENAME = 'MARTIN';
+
+뷰가 트리거로 작용해서
+서브쿼리 동작하는거 처럼 원래 보여주는 대상인 테이블에서의 변경이 일어남
+
+
+
+
+
+DESC USER_VIEWS;
+
+SELECT TEXT
+FROM USER_VIEWS
+WHERE VIEW_NAME='EMPVW30'
+
+
+SELECT *
+FROM EMPN; -> 데이터 딕셔너리(메타데이터랬으니까) 여기서 찾아봄, 테이블 있?, 뷰 있?
+
+FROM 뒤에 뷰가 있으면 이게 뷰 구나 라고 조회된다.
+
+SELECT *
+FROM EMPVWW30
+조회해보니 얘가 뷰다 싶으면
+(EMPVW30) -> (SELECT EMPNO, ENAME, SAL, DEPTNO
+		FROM EMP
+		WHERE DEPTNO = 30)
+이렇게 내부 동작이 이루어짐
+(접근 주소 같은 역할인듯)
+
+
+왜 이렇게 쓰나
+(여러가지 이유가 있을듯, 일단은 저장장소 및 내용 변경시 같이 변경되니까)
+
+
+
+
+만들었더니 권한 불충분이라 나옴
+SQL> SHOW USER
+USER is "SYSTEM"
+SQL> GRANT CREATE VIEW TO SCOTT;
+
+다시 ㄱㄱ
+CREATE VIEW EMPVW30
+AS
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 30;
+
+
+--------------해당 테이블 변경하면 뷰 역시 변경됨--------------------
+SCOTT>SELECT *
+  2  FROM (SELECT EMPNO, ENAME, SAL, DEPTNO
+  3  FROM EMP
+  4  WHERE DEPTNO = 30);
+
+     EMPNO ENAME             SAL     DEPTNO
+---------- ---------- ---------- ----------
+      7499 ALLEN            1600         30
+      7521 WARD             1250         30
+      7654 MARTIN           1250         30   <<
+      7698 BLAKE            2850         30
+      7844 TURNER           1500         30
+      7900 JAMES             950         30
+
+6 rows selected.
+
+SCOTT>
+SCOTT>UPDATE EMP                              << EMP 테이블만 변경
+  2  SET SAL = 3000
+  3  WHERE ENAME = 'MARTIN';
+
+1 row updated.
+
+SCOTT>SELECT EMPNO, SAL
+  2  FROM EMP
+  3  WHERE ENAME = 'MARTIN';
+
+     EMPNO        SAL
+---------- ----------
+      7654       3000
+
+SCOTT>SELECT * FROM EMPVW30;  << 뷰는 보여주는 역할을 하는 애일뿐임. EMP 테이블이 변경되면
+                                 마찬가지로 보여지는 값도 달라지게 됨
+     EMPNO ENAME             SAL     DEPTNO
+---------- ---------- ---------- ----------
+      7499 ALLEN            1600         30
+      7521 WARD             1250         30
+      7654 MARTIN           3000         30   <<
+      7698 BLAKE            2850         30
+      7844 TURNER           1500         30
+      7900 JAMES             950         30
+
+6 rows selected.
+
+
+---------------------------------------------------------
+
+
+
+
+-- VIEW의 수정
+
+-- CREATE TABLE 테이블명 .. ~~
+-- ALTER TABLE, ~~~
+
+-- CREATE VIEW 뷰명 ~~~
+-- ALTER xxxxx
+
+-- SELECT문의 변경 => 데이터딕셔너리
+
+CREATE OR REPLACE VIEW EMPVW30 <<<<<<<<<< ALTER VIEW 없음 X
+AS
+SELECT EMPNO, ENAME, COMM, DEPTNO
+FROM EMP
+WHERE DEPTNO = 30;
+
+
+CREATE OR REPLACE VIEW 묶어서 생각해놓자
+
+
+# 심플뷰
+AS 밑 서브쿼리 단순화
+# 컴플렉스뷰
+AS 밑에 JOIN, GROUP BY, HAVING이 오면
+
+왜 이렇게 나눠서 보는 것?
+왜? -> 
+
+SIMPLE VIEW   |  COMPLEX VIEW
+DML(O)        |  DML(될수도 안될수도)
+업데이트 아까 해봤는데 됐음 ㅇㅋ, 컴플렉스뷰는 보장못함
+
+
+# 조인 예
+CREATE VEIW EMP_DEPT
+AS
+SELECT E.ENAME, D.NAME
+FROM EMP E INNER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO;
+
+INSERT (X)
+
+
+# 그룹 예
+CREATE VIEW AVG_DEPTNO
+AS
+SELECT DEPTNO, AVG(SAL) AVGSAL
+FROM EMP
+GROUP BY DEPTNO;
+
+created.
+
+SELECT * FROM AVG_DEPTNO;
+
+INSERT (X)
+
+
+
+
+
+뷰 삭제
+DROP VIEW 뷰명
+
+
+
+
+이따가 뷰 문법/제한사항 중점으로 정리 점
+
+---------------------------------------------
+
+DB의 제약조건에 대해서 말하려고 하시는듯
+DB
+- 무결성
+- 동시성
+- 원자성
+- 일관성(맞나?)
+
+
+읽기 일관성
+- A에서 커밋되기 전의 결과가 B에는 반영되지 않음. B는 A에서 변경한걸 볼 수가 없지
+
+
+
+DML시 원본값들은 롤백 세그먼트(OR UNOB 세그먼트)에 저장됨
+(트랜잭션, SAVEPOINT 같이)
+
+
+-- 
+LOCK은 트랜잭션간 상호 파괴적인 행위를 막기위한 오라클의 보호관리 메카니즘이래
+흠 설명이 좀 ?
+- 최소단위 지정 -> DML로 발생되는 락은 최소 단위가 ROW단위
+- 자동으로 지정됨
+-
+
+
+LOCK 실습1
+
+
+A 3000 -> 100 DML로 업데이트시 EMP의 3000값이 롤백 세그먼트로 저장될 것인데
+              아직 COMMIT로 결정하지 않았기 떄문에 
+B 에서도 3000 -> 200 시 롤백 세그먼트에 아직 뭐가 저장될지 모르기 떄문에 락에 걸림
+(순서대로 저장되는듯?)
+
+A 사용시 다른 사람들 접근 불가 (ㅇㅇ)
+뭐 원래 CPU도 이렇지만 동작 HZ가 높기 때문에 체감은 잘 안됨
+자원을 한명이 작업시 독점하여 사용하기 때문에
+CDM방식으로 처리하는 것과 같음
+
+-실습상황
+1. A에서 SCOTT의 월급을 200으로 설정
+2. B에서 SCOTT의 월급을 100으로 설정
+3. 이러면 락 상태로 A에서 결정을 내리기 전까지는 B에서는 대기
+(한 쓰레드(?)가 자원을 독점하여 사용하기 떄문 , 일관성을 유지하기 위해서)
+4. A에서 결정을 내리면 락이 풀리고 B에서도 업데이트가 된다.
+
+Why? -> A에서 롤백 세그먼트 메모리를 독점하고 있으므로 
+
+롤백 세그먼트
+트랜잭션 진행시 그 이전 이미지를 기록하기 위해 사용되는 CIRCULAR구조의 세그먼트입니다.
+프로세스가 데이터베이스의 데이터에 변경 할 때 이전 값을 저장하는데 사용됩니다.
+
+
+롤백 세그먼트는 트랜잭션 진행시 그 이전 이미지를 기록하기 위해 사용되는 CIRCULAR구조의 세그먼트입니다.
+롤백 세그먼트는 프로세스가 데이터베이스의 데이터에 변경 할 때 이전 값을 저장하는데 사용됩니다.
+수정되기 전의 파일, 블록 ID같은 블럭 정보 및 데이터를 저장합니다.
+헤더는 현재 세그먼트를 사용하고 있는 트랜잭션에 대한 정보를 저장하는 있는 트랜잭션 테이블을 포함하고 있습니다.
+트랜잭션은 단 하나의 롤백 세그먼트에 롤백(실행 취소) 기록 전부를 기록합니다.
+
+
+
+실습2
+1. A에서 SCOTT의 월급을 100으로
+2. B에서 SMITH의 200으로 -> 다른 ROW면 락에 안 걸린다는 얘기를 하기 위해서
+3. B에서 SCOTT의 200으로 -> 같은 ROW면 락에 걸린다는 걸 보여줌 
+
+
+실습3 교착상태 DEADLOCK
+1. A 스콧 월급 UPDATE
+2. B 스밋 월급 UPDATE
+3. A 스밋 월급 UPDATE - 락(B가 끝날때 까지 기다려야함)
+4. B 스콧 월급 UPDATE - 락(A가 끝낼때 까지 기다려야함)
+둘이서는 해결이 안됨
+
+이 때의 오라클 동작
+A가 조금 더 기다렸으니까 A의 마지막 명령 1개는 취소됨
+
+(커밋할건지 롤백할건지 안 물어봄)
+
+
+A > UPDATE EMP
+  2  SET SAL = 100
+  3  WHERE ENAME = 'SCOTT';
+B>스미스월급변경
+
+1 row updated.
+
+A > UPDATE EMP
+  2  SET SAL = 200
+  3  WHERE ENAME = 'SMITH'
+  4  ;
+B>스콧월급변경
+
+UPDATE EMP
+ERROR at line 1:
+ORA-00060: deadlock detected while waiting for resource
+
+A가 다시 스미스월급 변경시 B에서 마지막 명령이 취소됨
+
+
+Dead Lock 해결방법
+- 시간마다 나눠서          ( CDM )
+- 업무를 한쪽에 이관해버림 (한 프로세스에 몰빵)
+
+
+
+# 뭐 설명하려고 그러나
+# 키 설명 하려고 그러나
+# 제약조건에 관한 설명인듯
+
+EMP                                  DEPT
+EMPNO    ENAME    SAL    DEPTNO  |   DEPTNO    DNAME    LOC
+중복(X)  중복(O)                 =            
+NULL(X)  NULL(x)                           
+primary    not   check  foreign key  primary  unique
+key       null            참조
+
+
+DEPTNO 중복 X, NULL X
+DEPTNO(1,2,3,4) = DEPTNO(1,2,3,4) 
+5번 부서따위 안됨
+DNAME 중복X, UNIQUE
+
+
+
+
+
+#########
+무결성을 지키기위해
+DML 할 때마다 제약조건을 만족하는지 검사하고
+만족하면 실행, 아니면 실행안함
+Constraint
+
+
+중복(X), NULL(X)
+
+
+---------------------------------------------------------
+
+CONSTRAINT
+1. 테이블 정의 시에
+	1-1. 컬럼레벨 정의 방식
+	  컬럼명 DATATYPE [CONSTRAINT 제약명] 제약종류
+		[]로 제약에 이름을 줄 수 있음
+		제약명을 생략했다면 제약에 이름이 없는 것이 아니라
+		오라클이 제약명을 SYS_C숫자 형식으로 임의 부여
+	1-2. 테이블 레벨 정의 방식
+ 		컬럼명 DATATYPE,
+		컬럼명 DATATYPE,
+		CONSTRAINT 제약명 제약종류(컬럼명),
+		CONSTRAINT 제약명 제약종류(컬럼명),
+
+CREATE TABLE EMP1
+(EMPNO NUMBER(4) CONSTRAINT EMP1_EMPNO_PK PRIMARY KEY,
+ENAME VARCHAR2(20) NOT NULL,
+SAL NUMBER(7,2),
+DEPTNO NUMBER(2),
+CONSTRAINT EMP1_SAL_CK CHECK(SAL BETWEEN 500 AND 5000),
+CONSTRAINT EMP1_DEPTNO_FK FOREIGN KEY(DEPTNO)
+REFERENCES DEPT1(DEPTNO));
+포린키는 참조해야대
+
+
+
+내가 생성한 제약조건에 대한 정보를 확인###################
+DD
+USER_CONSTRAINTS
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME, SEARCH_CONDITION <<- 얘도 메타
+FROM USER_CONSTRAINTS					<<-메타데이터(변수ㅇㅋ)
+WHERE TABLE_NAME IN ('EMP1', 'DEPT1')
+WHERE TABLE_NAME IN ('DEPT1')
+/
+
+
+CONSTRAINT_NAME                  C TABLE_   SEARCH_CONDITION (CHECK경우 제약조건은)
+------------------------------   - ------   --------------------
+SYS_C0011053(임의로 생성된 애들) P DEPT1
+SYS_C0011054                     U DEPT1
+SYS_C0011055                     C EMP1     "ENAME" IS NOT NULL
+EMP1_SAL_CK                      C EMP1     SAL BETWEEN 500 AND
+                                            5000
+
+EMP1_EMPNO_PK                    P EMP1
+EMP1_DEPTNO_FK                   R EMP1
+				FOREIGN KEY
+6 rows selected.
+
+오라클이 이따구로 만들어놓음
+NOT NULL이 CHECK의 특수한 일종으로
+
+2. 테이블 생성 후에 추가
+
+1,2번 부서 있다고 가정시
+INSERT INTO EMP1 VALUES (2222, 'KILL', 3000, 999);
+999번 부서는 없으니까
+
+ORA-02291: integrity constraint (SCOTT.EMP1_DEPTNO_FK) violated - parent key
+not found
+부모? 이 에러는 레퍼런스하는 테이블에 없는 값이 있나봄
+
+DEPT.DEPTNO 레퍼런스 되는 애 (parent, master)
+EMP.DEPTNO 참조하는 애 (child, slave) 
+
+# FROM 쓸 수 있음.
+
+DELETE [FROM] DEPT1
+WHERE DEPTNO = 1;
+
+
+
+## 참조하는애 있으면 부모는 못 없앰
+SQL> SELECT * FROM EMP1;
+
+     EMPNO ENAME                       SAL     DEPTNO
+---------- -------------------- ---------- ----------
+       111 HONG                       3000          1
+
+SQL> SELECT * FROM DEPT1;
+
+    DEPTNO DNAME                LOC
+---------- -------------------- --------------------
+         1 A                    B
+         2 AA                   BB
+
+SQL> DELETE FROM DEPT1
+  2  WHERE DEPTNO = 1;
+DELETE FROM DEPT1
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (SCOTT.EMP1_DEPTNO_FK) violated - child record
+found
+
+
+DROP TABLE EMP1 PURGE
+#흘려넘기셈
+레퍼런시스 딜릿 온 캐스케이드 옵션이 있음 함부로 만들지 마셈
+
+
+
+
+
+
+
+
+
+--> DEPT1 : LOC UNIQUE 제약추가
+
+ALTER TABLE 테이블명
+ADD 테이블레벨정의방식
+
+ALTER TABLE DEPT1
+ADD CONSTRAINT DEPT1_LOC_UK(라는제약) UNIQUE(라는 제약조건) (LOC);
+
+LOC 같은 거 인서트하면 에러남
+(제약이 유니크로 바꼇으니까)
+
+ALTER TABLE DEPT1
+DROP CONSTRAINT DEPT1_LOC_UK;
+
+제약조건 작명방식 흠...
+
+
+
+
+NOT NULL
+UNIQUE 
+
+1. NULL 추가 할 수 있을까? ㅇㅋ 당근 여러개도 당근 ㅇㅋ 
+NULL을 중복체크할 생각은 못했네 당근 안댐
+
+
+# 팁
+이미 그 제약을 위배중일시 그 제약을 추가할 수 없음
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 오라클 날짜 포멧 출력 형식 기본 지정
+ alter session set nls_date_format='YYYY-MM-DD HH:MI:SS';
+이거는 잠깐만 변경되고
+
+# 영구적 변경법
+
+1) 오라클 환경변수 조회하기
+select * from v$nls_parameters;
+
+2) 날짜형식 변경하기
+alter session set nls_date_format = 'YYYY-MM-DD'; //datefromat변경
+alter session set nls_timestamp_format = 'YYYY-MM-DD HH:MI:SS'; //timestamp_format변경
+
+3) 정상적으로 변경되었는지 확인
+
+select * from emp
+where hiredate = '1981-02-22';
+/*alter [session/system]
+ 1. session : 현재접속한 session(쿼리)에서만 변경
+ 2. system : database자체를 변경
+  scope=[both/spfile]
+  -both : 바로적용 또는 재시작(오류날 가능성이 높다)
+
+  -spfile : DB를 재시작후에 변경
+
+*/
+
+
+
+**SQL Command Line으로 들어가서 system계정으로 접속해서 바꿔야 한다.(영구적 변경)
+
+alter system
+
+ set nls_date_format = 'YYYY-MM-DD'
+
+  scope=spfile;
+
+alter system
+
+ set nls_timestamp_format = 'YYYY-MM-DD HH:MI:SS'
+
+  scope=spfile;
+
+위 구문을 입력한뒤에 데이터베이스를 껐다 켜야 적용된다.(Stop Database후 Start Database)
+
+
+select * from nls_database_parameters
+where parameter = 'NLS_DATE_FORMAT';
+
+
+---------------------------------------------------
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+ORDER BY SAL DESC
+
+
+# PSEUDO COLUMN (의사열, 가짜열)
+# 행순서, ROW주소
+SELECT ROWNUM, ROWID, EMPNO
+FROM EMP;
+
+ROW순서는 테이블에서 ROW를 뽑을 때의 순서로 매겨짐
+
+
+CREATE VIEW TOPN	<<요러케 뷰 만들어서 이름줘도 되지만
+AS
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+ORDER BY SAL DESC;
+
+SELECT ROWNUM, EMPNO, ENAME, SAL
+FROM TOPN
+WHERE ROWNUM <=3;
+(오)
+
+
+인라인뷰(INLINE-VIEW)
+TOP-N분석(상위 몇명 하위 몇명)
+급여 가장 많 3명
+<<걍 서브쿼리로 이름 안주고 써도 댐
+SELECT EMPNO, ENAME, SAL		
+FROM (SELECT EMPNO, ENAME, SAL
+	FROM EMP
+	ORDER BY SAL DESC)
+WHERE ROWNUM <=3
+
+LIMIT <- MYSQL
+SELECT TOP 3 
+
+LIMIT QUERY
+
+
+
+
+SELECT ROWNUM, EMPNO, ENAME, SAL
+FROM EMP
+ORDER BY SAL DESC;
+ROWNUM(왜 순서가 엉망이냐, 뽑고 나서 ORDER)
+
+
+SELECT ROWNUM, EMPNO, ENAME, SAL
+FROM TOPN
+WHERE ROWNUM <=3;
+왜 순서가 정상이냐(ORDER된걸 뽑으니까)
+
+
+ROW 스탑키 있음
+만나서 조건X 면 하다가 중단해버리는 기능
+(어차피 맞겠지 해서 중단해버림, 성능향상)
+1,2,3
+>3 (이러면 1에서 X니까 중단해버림. 에러임)
+=3 (망함 일케쓰면)
+<=3 (1 ㅇㅋ2 ㅇㅋ3 ㅇ 4ㄴ 중단)
+항상 작거나 같다고 써야함
+
+
+
+
+
+
+
+## INDEX
+(성능과 밀접한 결과)
+목요일에
+
+
+
+
+
+

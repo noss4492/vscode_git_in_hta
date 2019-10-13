@@ -1,0 +1,131 @@
+5.CUST_ID 컬럼에 PRIMARY KEY 제약을 추가시키시오 (단 제약명은 CUST_ID_PK ) 
+Name                                      Null?    Type
+----------------------------------------- -------- ------------
+CUST_ID                                            NUMBER(6)
+CUST_GENDER                                        NUMBER
+CUSET_NAME                                         VARCHAR2(10)
+
+>> ALTER TABLE HW_CUST 
+   ADD CONSTRAINT HW_CUST_ID_PK PRIMARY KEY(CUST_ID);
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ---------------
+ CUST_ID                                   NOT NULL NUMBER(6)
+ CUST_GENDER                                        NUMBER
+ CUSET_NAME                                         VARCHAR2(10)
+
+
+6.CUST 테이블을 복사하여 CUSTOMER 테이블을 생성 
+CREATE TABLE HW_CUSTOMER
+AS
+SELECT *
+FROM HW_CUST;
+ 
+7.그림3 처럼 정보를 확인할수 있는 있는 SQL문을 작성하시오.  
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME
+FROM USER_CONSTRAINTS
+WHERE TABLE_NAME = 'HW_CUST'
+
+
+
+8. empvw10  뷰를 생성 
+
+CREATE VIEW EMPVW10
+AS
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+9. EMPVW10 뷰를 다음과 같이 수정
+
+CREATE OR REPLACE VIEW EMPVW10
+AS
+SELECT EMPNO, ENAME, COMM, HIREDATE, DEPTNO
+FROM EMP
+WHERE DEPTNO = 10;
+
+
+10. EMPVW10번 뷰의 정보를 데이터 딕셔너리에서 찾으려고 한다. 
+사용할 SELECT문은? 
+(VIEW_NAME, TEXT 컬럼만)
+
+SELECT TEXT, VIEW_NAME
+FROM USER_VIEWS
+WHERE VIEW_NAME='EMPVW10'
+
+11. EMPVW10 뷰를 삭제!! 
+DROP VIEW EMPVW10
+
+12.  EMP 테이블을 복사한 EMP10  생성하라
+CREATE TABLE EMP10
+AS
+SELECT *
+FROM EMP
+
+
+13. EMP10 테이블에서  30번 부서사원들의 사번 이름 JOB 부서번호만 볼수 있는 CEMP10 뷰를 생성하시오.
+CREATE VIEW CEMP10
+AS
+SELECT EMPNO, ENAME, JOB, DEPTNO
+FROM EMP
+WHERE DEPTNO = 30;
+
+14. 81년도에 입사한 사원중 가장 월급 적게 받는 사람 3명만 출력하시오 (사번 , 이름  급여 , 입사일 ) 
+-- 1. 별로 좋은 방법같지는 않다. 나라마다 년월일 표기 방법이 다를 수도 있다.
+SELECT EMPNO, ENAME, SAL, HIREDATE
+FROM (SELECT EMPNO, ENAME, SAL, HIREDATE
+	FROM EMP
+	WHERE SUBSTR(HIREDATE, 1, 2) = 81
+	ORDER BY SAL ASC)
+WHERE ROWNUM <= 3;
+
+-- 2. TO_CHAR로 'YY' 년도 끝자리 두자리만 빼서 비교하였다.
+SELECT EMPNO, ENAME, SAL, HIREDATE
+FROM (SELECT EMPNO, ENAME, SAL, HIREDATE
+	FROM EMP
+	WHERE '81' IN TO_CHAR(HIREDATE, 'YY')
+	ORDER BY SAL ASC)
+WHERE ROWNUM <= 3;
+
+
+15. 다음 제약을 포함한 DEPT10 테이블을 생성 
+      (컬럼명과 데이터 타입은 DEPT 테이블참고) 
+    DEPTNO <= PK 제약  제약명 : DEPT10_DEPTNO_PK 
+    DNAME <= UK 제약  제약명 : DEPT10_DNAME_UK
+
+CREATE TABLE DEPT10(
+	DEPTNO NUMBER(4) CONSTRAINT DEPT10_DEPTNO_PK PRIMARY KEY,
+	DNAME VARCHAR2(20) CONSTRAINT DEPT10_DNAME_UK UNIQUE );
+
+# 여러 키를 묶을때 이렇게 묶고 ()안에 들어가는 컬럼명을 복수로 써도 된다.
+CREATE TABLE DEPT10(
+	DEPTNO NUMBER(4),
+	DNAME VARCHAR2(20),
+	CONSTRAINT DEPT10_DEPTNO_PK PRIMARY KEY(DEPTNO),
+	CONSTRAINT DEPT10_DNAME_UK UNIQUE KEY(DNAME) NOT NULL);
+
+(16~18) EMP10 테이블에 여러가지 제약을 여러가지 제약을 추가해보자. 
+
+16.  EMPNO <= PK : 제약명 : EMP10_EMPNO_PK 
+
+ALTER TABLE EMP10
+ADD CONSTRAINT EMP10_EMPNO_PK PRIMARY KEY (EMPNO)
+
+17.  ENAME <= UNIQUE 제약명 : EMP10_ENAME_UK 
+
+ALTER TABLE EMP10
+ADD CONSTRAINT EMP10_ENAME_UK UNIQUE (ENAME)
+
+18.  DEPTNO <= FK  제약명 : EMP10_DEPTNO_FK
+	참조컬럼은 DEPT10 테이블의 DEPTNO 컬럼 
+
+ALTER TABLE DEPT10
+ADD CONSTRAINT EMP10_DEPTNO_FK FOREIGN KEY (DEPTNO)
+REFERENCES DEPT10(DEPTNO)
+
+
+19.  DEPT10_DNAME_UK  제약을 삭제 
+ALTER TABLE DEPT10
+DROP CONSTRAINT DEPT10_DNAME_UK
+
+

@@ -1,0 +1,70 @@
+1.   사원번호 7499 번사원의 월급을 5000으로 바꿔라 ?
+UPDATE HWEMP
+SET SAL = 5000
+WHERE EMPNO = 7499;
+
+2.    20번 부서의 사원들의 월급을 4000 으로 바꿔라 ?
+UPDATE HWEMP
+SET SAL = 4000
+WHERE DEPTNO = 20;
+
+3.   부서 테이블에  부서번호 50, 부서위치 Boston , 부서명  reserch 로 해서 data 를 입력하라 ?
+INSERT INTO HWDEPT VALUES(50, 'research', 'Boston');
+
+
+4.  사원번호 7698 번 사원의 부서 번호를 7499번 사원의 부서번호로 바꿔라 ?
+UPDATE HWEMP
+SET DEPTNO = (SELECT DEPTNO
+		FROM EMP
+		WHERE EMPNO=7698);
+
+5.   10 번 부서의 사원들의 커미션을  smith 의 커미션으로 바꿔라 ?
+UPDATE HWEMP
+SET COMM = NVL2((SELECT COMM
+		FROM HWEMP
+		WHERE ENAME = 'SMITH'),COMM, 0)
+WHERE DEPTNO = 10;
+-- 왜 안됨? 흠.. 아 테이블이 깨졌었네
+
+
+6.   사원 테이블에 data 를 집어 넣는데  사원번호를 9901 이라고 하고
+       이름을 jackson , 직업을  salesman , 부서번호를 10 번 이라고 해서
+     data 를 집어 넣어라 ?
+
+INSERT INTO HWEMP VALUES(9901, 'jackson', 'salesman', NULL, NULL, NULL, NULL, 10);
+
+7.   job 이 salesman 인 사원의  사원번호와 이름 과 직업을 사원테이블에 insert 하여라 ?
+
+INSERT INTO HWEMP(EMPNO, ENAME, JOB)
+	SELECT EMPNO, ENAME, JOB
+	FROM HWEMP
+	WHERE JOB = 'SALESMAN';
+# 뭐 이상한 테이블이지만 문제의 조건은 충족하였다.
+
+8.   7369번 사원과 같은 직업을 가진 사원들의 월급을 7698 번 사원의 월급으로
+      수정하여라 ?
+
+UPDATE HWEMP
+SET SAL = (SELECT SAL
+	   FROM HWEMP
+	   WHERE EMPNO = 7369)
+WHERE JOB = (SELECT JOB
+	FROM HWEMP
+	WHERE EMPNO = 7369);
+
+9.  jackson 사원의 data 만  삭제 하여라 ?
+
+DELETE HWEMP
+WHERE ENAME = 'jackson';
+
+10.   data 를 집어 넣는데  사원 번호를 9902, 이름을 동수 , 그리고 입사일을
+     현재 날짜로 집어 넣어라 ?
+
+INSERT INTO HWEMP VALUES(9902, '동수', NULL, NULL, SYSDATE, NULL, NULL, NULL);
+
+
+# 지나가는 말
+테이블 복사생성시 제약조건은 따라오지 않음
+
+
+

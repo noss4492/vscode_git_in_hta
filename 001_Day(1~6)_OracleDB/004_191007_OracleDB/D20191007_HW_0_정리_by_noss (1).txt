@@ -1,0 +1,480 @@
+#여기는 복습부분임
+
+# 첨에 헷갈린 것
+8. SALES부서의 모든 사원에 대한 부서번호, 이름 및 직업을 출력하라
+# 조인으로 푼 것
+SELECT EMPNO, ENAME, JOB
+FROM EMP JOIN DEPT
+USING (DEPTNO)
+WHERE DNAME = 'SALES'
+
+# 서브쿼리로 푼 것
+SELECT EMPNO, ENAME, JOB
+FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO
+		FROM DEPT
+		WHERE DNAME = 'SALES')
+
+# 조인으로 
+SELECT EMPNO, ENAME, JOB
+FROM EMP INNER JOIN DEPT
+ON EMP.DEPTNO = DEPT.DEPTNO
+#USING(DEPTNO) 이거는 SYNTAX SUGER라서 지양하는 편이 좋은 듯 함.
+WHERE DEPT.DNAME = 'SALES'
+
+# 서브쿼리로
+SELECT EMPNO, ENAME, JOB
+FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO
+		FROM DEPT
+		WHERE DNAME = 'SALES')
+
+-------------------------------------------
+
+
+
+TO_CHAR(컬럼명, '형식')
+EX)
+SELECT ENAME, TO_CHAR(SAL*12*1198+NVL(COMM,0), 'L999,999,999) AS "연봉"
+
+
+# 막간 NVL
+NVL(인자, 변환할 문자)
+인자가 NULL이면 변환할 문자가 대신 들어감
+
+NVL(ENAME, 'ENAME') NVL(COMM,0) 이런식으로 문자열도 OK
+
+
+# 일반함수
+
+## [DECODE]랑 [CASE] 왠지 쓸 일이 많아보인다. 제대로 알아두자
+☆ DECODE
+SELECT ENAME, SAL
+DECODE(JOB, 'MANAGER', SAL*1.1,
+	     'CLERK', SAL*1.05,
+	              SAL*1.01) AS "UPSAL"
+이전의 작업에서는 DECODE로 사용했다고 하나 지금은 표준이 아니다.
+그래도 유지보수시에 쓰일 수 있으니 알아둘 것
+
+
+☆ CASE
+
+EX)
+SELECT ENAME, JOB, SAL, CASE
+				WHEN JOB = 'MANAGER' THEN SAL*1.1
+				WHEN JOB = 'CLERK' THEN SAL*1.05
+ELSE 
+	SAL*1.01
+END "UPSAL1"
+FROM EMP
+
+
+EX)
+DECODE(JOB, 'MANAGER, SAL*1.1,
+  	    'CLERK', SAL*1.05,
+		     SAL*1.01) AS "UPSAL2"
+
+
+위의 DECODE와 같은 기능을 하여 같은 UPSAL이 출력될 것이다.
+CASE는 ANSI표준이고 DECODE는 아니다.
+CASE를 애용하되 DECODE는 잊지 말고 유지보수시 사용하도록 하자.
+
+
+
+
+###### 10-02 문제풀이 복습 과정임 ######
+#문제 다시 풀어주심
+DAY 3 - 2_4
+SELECT ENAME||
+	LPAD(' ', 7-LENGTH(ENAME),' ')||
+	'IS CHARGED FROM '||
+	HIREDATE||
+	LPAD(' ', 10-(LENGTH(HIREDATE)),' ')||
+	TRUNC(MONTHS_BETWEEN(SYSDATE, HIREDATE)/12,0)||
+	'년 '||
+	TRUNC(MOD(MONTHS_BETWEEN(SYSDATE, HIREDATE),12), 0)||
+	'개월' AS "근속년월"
+FROM EMP
+/
+
+DAY 3 - 3
+
+# 저번꺼 조금 수정함(이러면 더 이쁘게 나옴)
+SELECT E.ENAME||LPAD(' ', 7-LENGTH(E.ENAME),' ')||
+	LPAD('('||E.SAL||')', ROUND((E.SAL)/100,0)+2+LENGTH(SAL),'*') AS "사원별 급여 현황"
+FROM EMP E
+ORDER BY SAL DESC
+
+
+# 선생님 추천 (스텝바이스텝으로 이해하기 좋은 듯)
+LPAD 안에 들어있는 E.SAL 인자가 헷갈릴 수 있으니까 뒤로 빼서 사용하셨다.\
+#(내코드아님)
+SELECT ENAME||LPAD(' ',ROUND(SAL/100,0)+1,'*')||'('||SAL||')' AS "사원별 급여 현황"
+FROM EMP E
+ORDER BY SAL DESC
+
+
+# 생각 1(이것은 과정일뿐임 생각2로 ㄱ)
+SELECT E.ENAME||LPAD(' ', 7-LENGTH(E.ENAME),' ')||
+	LPAD(' ', ROUND((E.SAL)/100,0)+2+LENGTH(SAL),'*')||
+	CASE
+		WHEN LENGTH(SAL) = 3 
+			THEN LPAD(' '||'('||E.SAL||')', 55-ROUND((E.SAL)/100,0)+7-LENGTH(SAL)+LENGTH(SAL), ' ')
+		ELSE
+			LPAD(' '||'('||E.SAL||')', 55-ROUND((E.SAL)/100,0)+3+LENGTH(SAL), ' ')
+	END "사원별 급여 현황"
+FROM EMP E
+ORDER BY SAL DESC
+--ROUND(E.SAL,-2) = TRUNC(E.SAL, -2)
+--LENGTH(SAL) -> 3 ~ 4
+-- LENGTH 3이면 4, 4면 3, 5면 2 합쳐서 7이 되면 되잖?
+/
+
+
+# 생각 2(생각1의 코드를 간략화)
+SELECT E.ENAME||LPAD(' ', 7-LENGTH(E.ENAME),' ')||
+	LPAD(' ', ROUND((E.SAL)/100,0)+2+LENGTH(SAL),'*')||
+	LPAD(' '||'('||E.SAL||')', 55-ROUND((E.SAL)/100,0)+7-LENGTH(SAL)+LENGTH(SAL), ' ') AS "1"
+FROM EMP E
+ORDER BY SAL DESC
+/
+
+
+SELECT E.ENAME||LPAD(' ', 7-LENGTH(E.ENAME),' ')||
+	LPAD(' ', ROUND((E.SAL)/100,0)+2+LENGTH(SAL),'*')||
+	LPAD(' '||'('||E.SAL||')', 55-ROUND((E.SAL)/100,0)+7-LENGTH(SAL)+LENGTH(SAL), ' ') AS "1"
+FROM EMP E
+ORDER BY SAL DESC
+
+
+첫번재 LPAD 대신에 두번째열과 합쳐서 RPAD로 쓰는게 더 좋았을듯
+
+DAY 3 - 4_10
+
+SELECT DEPTNO, ENAME, SAL
+FROM EMP
+WHERE SAL > (SELECT AVG(SAL) FROM EMP)
+AND DEPTNO IN (SELECT DEPTNO
+		FROM EMP
+		WHERE ENAME LIKE '%S%') 
+/
+# 10번 or 20번 부서 AND 급여>평균급여인 사원들이 출력됨
+
+
+OK
+
+######  여기서부터 진짜 19-10-07  ######
+
+DB
+
+CLINT -> S
+      SQL
+QUERY:SELECT(개발비중 7~80%)
+-SELECT
+-FROM
+-WHERE
+-GROUP
+-HAVING
+-ORDER
+
+SQL*PLUS
+
+
+잠깐 팁
+# WHERE절에는 MULTIPLE ROW FUNCTION 안되더라
+
+# ORDER 기본값이 ASC였어?
+
+# 보여지는 출력열 수정(SQL*PLUS 명령어)
+COL "컬럼명" FORMAT A15 (A는 문자열을 의미하는듯 함)
+
+
+
+
+## SQL
+ QUERY : SELECT (80% ? )
+ DML   : INSERT, UPDATE, DELETE (15% ?)
+(기타 5%)
+ TCL : COMMIT, ROLLBACK, SAVEPOINT(ANSI표준명령아님)
+ DDL : CREATE, ALTER, DROP, RENAME, TRUNCATE, COMMENTS    <<- AUTO COMMIT 발생
+ 먼 :
+ 가 :
+ 더 :
+ 있 :
+ 음 :
+ DCL : 
+
+
+(DML : data manipulation language 데이터 조작(조정) 어)
+(TCL : Transaction control language : 트랜잭션 조작 어 )
+(DDL : data definition language : 데이터 정의(테이블 같은애들) 어)
+구조를 정의하는 애들이라서
+바로 커밋됨
+
+
+(대부분 ANSI 표준 키워드) INSERT, UPDATE, DELETE, COMMIT, ROLLBACK
+트랜잭션 : 일련의 작업 처리를 위한 연관된 DML의 묶음 #내주석:업무 처리를 위한 논리적인 작업 단위
+성격     : all or nothing (아예 되던가 아예 안되던가) #내주석:이게 원자성임
+명령어   : commit(ㅇㅋ 반영하자) or rollback(ㄴㄴ 취소하자)
+
+sqlplus는 로그인부터 exit까지가 한개의 트랜잭션임
+
+# 그냥 잡솔
+T : atomicity consistency isolation durability
+트랜잭션 단위를 LUW logical units of work라고 부름
+
+
+
+
+## INSERT
+ INSERT INTO 테이블명
+ VALUES 내용
+
+ex)
+INSERT INTO DEPT
+VALUES(50, 'A', 'B');
+
+ex) NULL이 암시적으로 insert됨
+ INSERT INTO DEPT(DEPTNO, DNAME)
+ VALUES(60, 'C');
+
+60은 DEPTNO에 들어가고
+'C'는 DNAME에 들어감
+따로 지정하지 않은 값은 들어가지 않음(NULL)
+
+ex) NULL이 명시적으로 insert됨
+INSERT INTO DEPT
+VALUES (70, NULL, 'D');
+
+DEPTNO DNAME          LOC
+------ -------------- -------------
+    50 A              B
+    60 C
+    70                D
+    10 ACCOUNTING     NEW YORK
+    20 RESEARCH       DALLAS
+    30 SALES          CHICAGO
+    40 OPERATIONS     BOSTON
+
+
+
+## UPDATE
+UPDATE DEPT
+SET DNAME ='A'  <- 이러면 부서이름 싹다 A로 바뀜;
+WHERE DEPTNO = 70   <- 70번 부서만 ㅇㅋ
+
+## DELETE
+
+DELETE DEPT
+WHERE DEPTNO IN (50, 60, 70);
+
+ㅇㅋㄷㅋ
+
+
+--이제 트랜잭션 설명 하려고 함
+
+# 
+SET SQLPROMPT "_USER>"
+
+
+로그인하고
+발생하는 모든 DML
+종료시까지 묶어서 하나의 트랜잭션이다.
+잘못 입력했으면 취소할 수 있음.
+
+이야 진짜 롤백 되네
+
+
+하나의 트랜잭션 ( 로그인 -> 로그아웃)
+
+근데 TCL을 만나면 현재 트랜잭션은 종료됨
+다음번 첫 SQL을 만나면 다시 새로운 트랜잭션이 시작됨
+
+# 갑자기 종료될 시(비정상종료시) 기본은 AUTO ROLLBACK 
+  (이상한 DML이 들어갈 수 있으니무결성 유지를 위해)
+# EXIT 정상 종료 명령시 기본은 AUTO COMMIT
+# DDL, DCL을 사용해도 AUTO COMMIT됨
+
+상당히 긴 트랜잭션 작업시 SAVEPOINT를 사용하여 중간 ROLLBACK지점을 정해두자.
+
+# 사용법
+SAVEPOINT 세이브포인트이름
+ROLLBACK TO 세이브포인트이름
+
+되돌아갈 때는 마음대로지만 돌아올 수는 없단다.
+ANSI 표준명령은 아님. 굳이 포함시키자면 TCL로 포함시키는 것일 뿐임.
+
+
+
+## DDL
+
+테이블 종류 2가지
+1. 데이터 딕셔너리
+2. 사용자 정의 테이블
+
+
+
+
+사용자 정의 테이블 생성
+CREATE TABLE EMPS
+(EMPNO NUMBER(4),   -- 숫자 타입 4자
+ENAME VARCHAR2(20), -- 가변 문자 20자, charter varying
+SAL NUMBER(7,2),
+HIREDATE DATE);
+
+number   - 숫자 타입
+varchar2 - 성능 향상된 가변 문자 타입, C에서의 이중포인터 포인터배열과 유사함, 남는 공간은 할당되지 않음
+마찬가지로 메모리에서 읽어 들여올때 해당 값의 주소를 봐야하므로 [읽기 속도가 느림. 공간 효율은 높음]
+varchar  - (원래 있던) 가변 문자 타입
+char     - 고정 문자 타입, C에서의 그냥 배열
+[읽기 속도 빠름, 공간 효율 낮음]
+date
+
+
+민번 - 문자열타입 추천
+
+숫자에 padding 하는거 보단 문자열로 하는 게 더 빠름 ㅇㅇ
+lpad함수 동작 속도 고려
+char ㅇㅋ 바 ㄴㄴ
+
+dba가 이런 일을 하는구만
+
+
+
+
+
+
+# 지나가는 생각
+쿼리에도 ALIAS 쓸수있구나
+
+SQL> SELECT a.dname, b.cnt
+     FROM dept a, (SELECT deptno, COUNT(empno) cnt 
+                   FROM emp 
+                   GROUP BY deptno) b <<-요렇게 쿼리에 예명 가능 ㅇㅋㅇㅋ
+     WHERE a.deptno = b.deptno
+       AND b.cnt > 3     
+
+
+
+-- AUTOCOMMIT : 정상종료, DDL, DCL 사용시
+
+CREATE TABLE COPY_EMP
+(EMPNO NUMBER(38),
+ENAME VARCHAR2(10),
+JOB VARCHAR2(9),
+MGR NUMBER(4),
+HIREDATE DATE,
+SAL NUMBER(7,2),     <- 99999.99
+COMM NUMBER(7,2),
+DEPTNO NUMBER(2));
+
+INSERT INTO COPY_EMP VALUES(7934, 'MILLER', 'CLERK', 7782, SYSDATE, 1300, NULL, 10)
+	INTO COPY_EMP VALUES(,,,,,,,,,,,)
+
+
+오 이 DDL(CREATE)에서도 서브쿼리가 되네가 아니라
+이렇게 테이블 복사하는 방법이 있는듯?
+CREATE TABLE COPY_EMP2
+AS
+SELECT * FROM EMP;
+
+
+카피시 데이터 없이 데이터 구조만 가지게 해보자.
+CREATE TABLE COPY_EMP5
+AS
+SELECT * FROM EMP
+WHERE 0 = 1
+
+WHERE 0 = 1 
+WHERE EMPNO = NULL
+WHERE EMPNO = 9999
+
+
+이것도 서브쿼리 되네
+뭐지? 어디든 서브쿼리 사용 가능인 것인가?
+INSERT INTO COPY_EMP5
+SELECT * FROM EMP;
+
+컬럼 추가(ADD)
+ALTER TABLE COPY_EMP2
+ADD (HP VARCHAR2(8));
+
+컬럼 데이터타입 변경(MODIFY)
+ALTER TABLE COPY_EMP2
+MODIFY MP VARCHAR2(13);
+
+컬럼명 변경(RENAME)
+ALTER TABLE COPY_EMP2
+RENAME COLUMN HP
+TO MP;
+
+컬럼 삭제(DROP)
+ALTER TABLE COPY_EMP2
+DROP COLUMN MP;
+
+
+# DDL 날려대는 회사는 좋은 회사 아님
+  이직시 참조할 것
+
+DROP TABLE COPY_EMP;
+# 개위험
+
+
+
+10^-9 초 마다의 명령어 기록을 가지고 있음
+
+
+# 그래서 요즘은 휴지통 있음
+
+보기
+SHOW RECYCLEBIN
+
+플래시백기능 있음 
+FLASHBACK TABLE COPY_EMP
+TO BEFORE DROP;
+휴지통 안거치고 바로 삭제
+DROP TABLE COPY_EMP PURGE;
+휴지통 비우기
+PURGE RECYCLEBIN;
+
+
+테이블 이름 변경
+RENAME COPY_EMP2 TO CEMP;
+
+
+테이블안에 ROW 전부 다 삭제(데이터타입 정의는 남아있음)
+DDL(복구못해)
+TRUNCATE TABLE CEMP;
+DML(복구할수있서)
+DELETE TABLE CEMP;
+
+
+
+DELETE CEMP
+WHERE DEPTNO = 10; 
+가능
+
+TRUNCATE TABLE CEMP
+WHERE 조건 못 써!
+그냥 전체 ROW 삭제할때만 써야댐.
+
+
+
+
+
+DDL : CREATE, ALTER, DROP, RENAME, TRUNCATE, COMMENTS
+
+
+
+
+# 주석 
+ DML   : (SELECT 얘가 들어가나? ), INSERT, UPDATE, DELETE (15% ?)
+ 일부에서는 SELECT는 따로 빼서 DQL or QUERY라고 표현하기로 함.
+ DCL   : COMMIT, ROLLBACK, GRANT, REVOKE
+ 일부에서는 COMMIT, ROLLBACK를 따로 빼서 TCL이라고 표현하기도 함.
+
+
+
+
+
+

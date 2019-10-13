@@ -1,0 +1,112 @@
+SUBQUERY 연습 문제 
+
+1.SMITH보다 월급을 많이 받는 사원들의 이름과 월급을 출력
+SELECT E.ENAME, E.SAL
+FROM EMP E
+WHERE SAL >= (SELECT E.SAL
+		FROM EMP
+		WHERE E.ENAME LIKE 'SMITH')
+
+2. 10번 부서의 사원들과 같은 월급을 받는 사원들의 이름과 월급과 부서번호를 출력
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL = (SELECT ENAME
+	     FROM EMP
+ 	     WHERE DEPTNO = 10)
+
+3. BLAKE와 같은 부서에 있는 사람들의 이름과 입사일을 출력하되 BLAKE는 제외
+SELECT ENAME, SAL, DEPTNO
+FROM EMP
+WHERE SAL IN (
+           SELECT SAL
+           FROM EMP
+           WHERE DEPTNO = 10)
+
+4. 평균급여보다 많이 받는 사원들의 사번, 이름, 월급을 출력하되 내림차순으로
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL > (SELECT AVG(SAL)
+FROM EMP)
+ORDER BY SAL DESC
+
+
+5. 이름에 'T'를 포함하는 사원들과 동일한 부서에서 근무하고 있는 사원의 사원번호와 이름을 출력
+SELECT EMPNO, ENAME
+FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO
+		 FROM EMP
+		 WHERE ENAME LIKE '%T%')
+
+6. 30번부서의 최고급여를 받는 사원보다 더 많은 급여를 받는 전체사원을 출력하라
+SELECT ENAME
+FROM EMP
+WHERE SAL > (SELECT MAX(SAL)
+		FROM EMP
+		WHERE DEPTNO = 30)
+ 
+
+7. 부서위치가 DALLAS인 모든 사원의 이름, 부서번호 및 직업을 출력하라
+# # 조인으로 푼 것. 이거 서브쿼리 어떻게 쓰지? 다시 풀어볼 것 
+SELECT ENAME, DEPTNO, JOB
+FROM EMP JOIN DEPT
+USING (DEPTNO)
+WHERE LOC = 'DALLAS'
+아니면 프롬절을 FROM EMP NATURAL JOIN DEPT으로
+
+#그게 아니라 이것은 서브쿼리 문제임
+SELECT ENAME 
+FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO
+		FROM DEPT
+		WHERE LOC = 'DALLAS')
+--이렇게도 서브쿼리가 되는구나
+
+
+8. SALES부서의 모든 사원에 대한 부서번호, 이름 및 직업을 출력하라
+# 조인으로 푼 것
+SELECT EMPNO, ENAME, JOB
+FROM EMP JOIN DEPT
+USING (DEPTNO)
+WHERE DNAME = 'SALES'
+
+# 서브쿼리로 푼 것
+SELECT EMPNO, ENAME, JOB
+FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO
+		FROM DEPT
+		WHERE DNAME = 'SALES')
+
+9. KING에게 보고하는 모든 사원의 이름과 급여를 출력(직속상사가 KING인)
+SELECT ENAME, SAL
+FROM EMP
+WHERE MGR = (SELECT EMPNO
+	     FROM EMP
+	     WHERE ENAME = 'KING')
+
+
+10. 자신의 급여가 사원평균급여보다 많으면서, 이름의 'S'자가 들어가는 사원과 동일 부서인 
+모든 사원의 사원번호, 이름 및 급여를 출력
+
+조건1. 자신의 급여가 평균 급여보다 많아야함
+조건2. 이름에 S자가 들어가는 사람과 동일부서
+조건3. 단 1, 2 조건을 모두 만족하는 사원의 사번, 이름, 급여
+
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO
+		 FROM EMP
+		 WHERE ENAME LIKE '%S')
+AND
+SAL > (SELECT AVG(SAL)
+       FROM EMP)
+
+
+
+
+
+
+
+
+
+
