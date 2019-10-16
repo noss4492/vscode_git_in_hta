@@ -2,6 +2,18 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - baseN",
+            "request": "launch",
+            "mainClass": "baseN"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BaseN",
+            "request": "launch",
+            "mainClass": "day03.BaseN"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - test",
             "request": "launch",
             "mainClass": "test"
